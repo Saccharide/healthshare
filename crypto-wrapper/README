@@ -1,0 +1,7 @@
+To install
+apt-get install python python-pip
+pip install secretsharing
+
+
+To run
+python2 main.py
