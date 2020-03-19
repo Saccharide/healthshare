@@ -12,45 +12,47 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 
 ## Setup and Usage Instructions
 ### I. OpenDHT
-**Install OpenDHT dependencies**
+#### Installation
+  **1) Install OpenDHT dependencies**
+  
+    sudo apt install libncurses5-dev libreadline-dev nettle-dev libgnutls28-dev libargon2-0-dev libmsgpack-dev librest
 
-sudo apt install libncurses5-dev libreadline-dev nettle-dev libgnutls28-dev libargon2-0-dev libmsgpack-dev librest
+  **2) Install python binding dependencies**
+  
+    sudo apt-get install cython3 python3-dev python3-setuptools
 
-**Install python binding dependencies**
+  **3) Install asio.hpp**
+  
+    wget https://github.com/aberaud/asio/archive/b2b7a1c166390459e1c169c8ae9ef3234b361e3f.tar.gz \
+    && tar -xvf b2b7a1c166390459e1c169c8ae9ef3234b361e3f.tar.gz && cd asio-b2b7a1c166390459e1c169c8ae9ef3234b361e3
+    && ./autogen.sh && ./configure --prefix=/usr --without-boost --disable-examples --disable-tests \
+    && sudo make install
 
-sudo apt-get install cython3 python3-dev python3-setuptools
+  **4) Install Git directory**
 
-**Install asio.hpp**
+    git clone https://github.com/savoirfairelinux/opendht.git
 
-wget https://github.com/aberaud/asio/archive/b2b7a1c166390459e1c169c8ae9ef3234b361e3f.tar.gz \
-&& tar -xvf b2b7a1c166390459e1c169c8ae9ef3234b361e3f.tar.gz && cd asio-b2b7a1c166390459e1c169c8ae9ef3234b361e3
-&& ./autogen.sh && ./configure --prefix=/usr --without-boost --disable-examples --disable-tests \
-&& sudo make install
+  **5) Build and Install**
 
-**Install Git directory**
+    cd opendht
+    mkdir build && cd build
+    cmake -DOPENDHT_PYTHON=ON -DCMAKE_INSTALL_PREFIX=/usr ..
+    make -j4
+    sudo make install
 
-git clone https://github.com/savoirfairelinux/opendht.git
+#### Usage
+  **Running a node**
 
-**build and install**
+    dhtnode
 
-cd opendht
-mkdir build && cd build
-cmake -DOPENDHT_PYTHON=ON -DCMAKE_INSTALL_PREFIX=/usr ..
-make -j4
-sudo make install
+  **specify a bootstrap node address (can be any running node of the DHT network)**
 
-**Running a node**
+    dhtnode -b
 
-dhtnode
+  **Put a key value pair**
 
-**specify a bootstrap node address (can be any running node of the DHT network)**
+    $ p [key] [value]
 
-dhtnode -b
+  **Search for a key**
 
-**Put a key value pair**
-
-$ p [key] [value]
-
-**Search for a key**
-
-$ q [key]
+    $ q [key]
