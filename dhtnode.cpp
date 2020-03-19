@@ -17,6 +17,14 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * Spring 2020 - Healthshare :
+ *  This file has been modified by Tony Tang, Quang Huynh, Elgin Lee Wei Sheng,
+ *  and Harrison Banh of Georgia Institute of Technology for Professor Ling
+ *  Liu's CS 6675 Advanced Internet Computing Class. We've settled on OpenDHT as
+ *  our Structured P2P Solution for our class project : HealthShare, a POC for
+ *  secure and open patient-provided information sharing with providers and
+ *  healthcare organizations. 
  */
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,13 +406,16 @@ void cmd_loop(std::shared_ptr<DhtRunner>& node, dht_params& params
 //                std::cout.flags(flags);
 //            });
 //        }
+
+        /* Spring 2020 - HealthShare : OpenDHT's 'put' command was modified to
+         share files between connected nodes instead of short, plaintext strings.*/
 		else if (op == "p") {
             std::string v;
             iss >> v;
             std::ifstream f;
             try {
                 f.open(v);
-                // get length of file:
+                // Get the length of a file 
                 f.seekg(0,f.end);
                 int length = f.tellg();
                 f.seekg(0,f.beg);
@@ -412,19 +423,19 @@ void cmd_loop(std::shared_ptr<DhtRunner>& node, dht_params& params
                 std::cout << "Reading " << length << " characters from file: " << v;
                 if (length > 0 ) {
                     std::vector<char> buffer(length);
-                    // read data continously
+                    // Continuously read the data from the file 
                     f.read(buffer.data(), length);
                     
-                    // closing the file handler
+                    // Close the file handler
                     f.close();
                     
-                    // convert buffer iton string
+                    // Convert the buffered byte data into a String 
                     std::string file_content = std::string(buffer.data(), length);
                     auto value = std::make_shared<dht::Value>(
                         dht::ValueType::USER_DATA.id,file_content);
                     value->user_type = "text/plain";
 
-                    // Putting data on to storage
+                    // Store the file on the node using the filename as a key/reference 
                     node->put(id, value, [start, value](bool ok) {
                         // End timer
                         auto end = std::chrono::high_resolution_clock::now();
