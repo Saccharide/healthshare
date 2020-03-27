@@ -1,0 +1,12 @@
+<html>
+  <head>
+	
+		<title>HealthShare User Portal</title>
+  </head>
+  <body>
+    <div><a href="/">HealthShare User Portal</a></div>
+		
+    <hr>
+    {% block content %}{% endblock %}
+  </body>
+</html>
