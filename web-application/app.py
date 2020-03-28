@@ -1,8 +1,8 @@
-"""Flask Login Example and instagram fallowing find"""
-
 from flask import Flask, url_for, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
-
+from crypto import *
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -24,13 +24,12 @@ class User(db.Model):
 def home():
     """ Session control"""
     if not session.get('logged_in'):
-        return render_template('index.html')
+        return render_template('login.html')
     else:
         if request.method == 'POST':
             username = getname(request.form['username'])
-            return render_template('index.html', data=getfollowedby(username))
-        return render_template('index.html')
-
+            return render_template('index.html', data=self.username)
+        return render_template('index.html', data=session['username'])
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -44,12 +43,23 @@ def login():
             data = User.query.filter_by(username=name, password=passw).first()
             if data is not None:
                 session['logged_in'] = True
+                session['username'] = request.form['username']
                 return redirect(url_for('home'))
             else:
                 return 'Dont Login'
         except:
             return "Dont Login"
 
+@app.route('/view/', methods=['GET', 'POST'])
+def view():
+    """View Form"""
+    items_list = [{'File Name': 'HelloWorld.zip', 'Date Created': '24/11/2020', 'Actions': {'icon': 'fa fa-plus', 'text': 'Open'}},
+          {'File Name': 'WorldHello.zip', 'Date Created': '30/11/2020', 'Actions': {'icon': '#', 'text': 'Open'}}]
+    return render_template('view.html', data=session['username'], columns=['File Name', 'Date Created', 'Actions'], items=items_list)
+
+@app.route('/uploadfile/', methods=['GET', 'POST'])
+def uploadfile():
+    return render_template('upload.html')
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
@@ -70,6 +80,18 @@ def logout():
     session['logged_in'] = False
     return redirect(url_for('home'))
 
+@app.route('/success', methods = ['POST'])  
+def success():  
+    if request.method == 'POST':  
+        f = request.files['file']
+        secret, shares = make_random_shares(1, 1)
+          
+        #f.save(f.filename)
+        uploads_dir = os.path.join(app.instance_path, 'uploads')
+        obs_filname = os.path.join(uploads_dir,secure_filename(str(secret)))
+
+        f.save(obs_filname)    
+        return render_template("success.html", name = str(secret))  
 
 if __name__ == '__main__':
     app.debug = True
