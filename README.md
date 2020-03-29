@@ -62,36 +62,52 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 	python2 main.py
 
 ## Design and Example Scenario
+HealthShare uses a series of Smart Contracts and API's to communicate between our file sharing P2P network and system log Block chains. 
+
 ### Smart Contracts
+  **1) Smart Contract 1 (HealthShare User): <user,birthdate> -> p2pFilename**
+  
+  This smart contract associates a HealthShare user to encrypted patient file in the P2P network. For simplicity sake, the user's file is a hash of their name and birthday which we assume to be unique.
+  	
+	<Tony,01/01/2020> -> 45678afaghsjda5yui6789
 
-Smart contract 1: <user,birthdate> -> p2pFilename
-e.g <Tony,01/01/2020> -> 45678afaghsjda5yui6789
+  **2) Smart Contract 2 (Share Owners): p2pFileName -> <approver_userid, encrypted_secret_shares_with_approver_public_key>**
+  
+  Smart Contract 2 both stores and represents the share owners of a patient file. It holds a mapping of the hashed P2P file name to name of the share owner and their encrypted share. 
+  
+	45678afaghsjda5yui6789 -> <Elgin, encrypted_secret_share_Elgin>
+	45678afaghsjda5yui6789 -> <Tony, encrypted_secret_share_Tony>
+	45678afaghsjda5yui6789 -> <Harrison, encrypted_secret_share_Harrison>
 
-Smart contract 2: p2pFileName -> <approver_userid,encrypted_secret_shares_with_approver_public_key>
-e.g.
-45678afaghsjda5yui6789 -> <Elgin, encrypted_secret_share_Elgin>
-45678afaghsjda5yui6789 -> <Tony, encrypted_secret_share_Tony>
-45678afaghsjda5yui6789 -> <Harrison, encrypted_secret_share_Harrison>
+  **3) Smart Contract 3 (Requests Smart Contract): : p2pFileName -> requestor_userid**
+  
+  Smart Contract 3 stores a mapping of hashed P2P file names to users who want to get access to that file.
+  
+	45678afaghsjda5yui6789 -> Quang
 
-Smart contract 3: (requests smart contract): p2pFileName -> requestor_userid
-e.g
-45678afaghsjda5yui6789 -> Quang
+  **4) Smart Contract 4 (Approved Requesting Users) : p2pFileName -> <approver_userid, requester_userid, encrypted_secret_shares_encrypted_with_requestor_public_key>**
+  
+  Smart Contract 4 stores the data regarding approved requests for a file. It maps the hashed P2P file name to a tuple of A) the user id of the approver B) the user id of the requestor and C) the secret share of the approver encrypted under the requestor's public key 
+  
+	45678afaghsjda5yui6789 -> <Elgin, Quang, [123], signatureOfMessagewithElginsPrivateKey>
+	45678afaghsjda5yui6789 -> <Tony, Quang, [456], signatureOfMessagewithElginsPrivateKey>
 
-Smart contract 4: p2pFileName -> <approver_userid, requester_userid, encrypted_secret_shares_encrypted_with_requestor_public_key>
-e.g.
-45678afaghsjda5yui6789 -> <Elgin, Quang, [123], signatureOfMessagewithElginsPrivateKey>
-45678afaghsjda5yui6789 -> <Tony, Quang, [456], signatureOfMessagewithElginsPrivateKey>
+  **5) Smart Contract 5 (Share Owner's Files) : user id -> p2pFileName
+  
+  Smart Contract 5 stores a list of patient files in which the user owns a share for. It is used in between Contracts 3 and 4 to grant a requesting user access to a patient file 
+  
+	Elgin -> 45678afaghsjda5yui6789
+	Tony -> 45678afaghsjda5yui6789
+	Harrison -> 45678afaghsjda5yui6789
 
-Smart contract 5: which files I can approve
-Elgin -> 45678afaghsjda5yui6789
-Tony -> 45678afaghsjda5yui6789
-Harrison -> 45678afaghsjda5yui6789
+  **6) Smart Contract 6 (Key Store): user id -> public key**
 
-Smart contract 6: user to public key mapping
-Elgin -> Elgin_Public_Key
-Tony -> Tony_Public_Key
-Harrison -> Harrison_Public_Key
-Quang -> Quang_Public_Key
+  Smart Contract 6 functions as a key store. It relates a user id with their public key. 
+  
+	Elgin -> Elgin_Public_Key
+	Tony -> Tony_Public_Key
+	Harrison -> Harrison_Public_Key
+	Quang -> Quang_Public_Key
 
 ### APIs Needed
 
@@ -144,7 +160,7 @@ To better illustrate and show the design of Healthshare, let us examine the foll
     - **Tony =** 456 (encrypted with Tony public key) -> encrypted_secret_share_Tony 
     - **Harrison =** 789 (encrypted with Harrison public key) -> encrypted_secret_share_Harrison
  
- ### Granting Example
+ ### Access Granting Example
  #### Quang's Request
 Quang, a 3rd party, wants and requests for access to Tony's file. To gain access, Quang needs any of the two shares in [123,456,789]. The system logs Quang's request and sends notifications to the share owners : Tony, Elgin, and Harrison asking them if they will both approve and grant Quang's access.
 
