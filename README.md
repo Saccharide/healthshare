@@ -64,7 +64,7 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 ## Design and Example Scenario
 HealthShare uses a series of Smart Contracts and API's to communicate between our file sharing P2P network and system log Block chains. 
 
-### Smart Contracts
+### I. Smart Contracts
   **1) Smart Contract 1 (HealthShare User): <user,birthdate> -> p2pFilename**
   
   This smart contract associates a HealthShare user to encrypted patient file in the P2P network. For simplicity sake, the user's file is a hash of their name and birthday which we assume to be unique.
@@ -109,43 +109,63 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	Harrison -> Harrison_Public_Key
 	Quang -> Quang_Public_Key
 
-### APIs Needed
-
-API 1: create mapping between
+### II. APIs Needed
+  **1) API 1 : Associating User Information**
+  
 	input: whatever authentication information you need <user, user birthdate>
 	output: List of p2pFileNames
 
-API 2: fetch public key of user
+  **2) API 2 : Fetching a User's Public Key**
+  
 	input: user_id
 	output: user_public_key
 
-API 3: create approval mappings (who can approve the newly created file)
+  **3) API 3: Approval Mappings**
+  
+  Who can approve a created file 
+  
 	input: p2pFileName, approval_user_id, encrypted_secret_share_approver_user_id
 	output: (updates smart contract 2 and 5) status message
 	
-API 4: check if pending approval requests (goes to smart contract 5 and queries smart contract 3 and checks against smart contract 4 if it has ALREADY been approved)
+  **4) API 4 : Checking Pending Approval Requests**
+  
+  Checks the status of pending approval requests -- goes to Smart Contract 5, queries Smart Contract 3, and checks against Smart Contract 4 to see if a request has *already* been approved
+  
 	input: -
 	output: status message
 
-API 5: get encrypted_secret_shares_with_approver_public_key
+  **5) API 5 : Getting encrypted_secret_shares_with_approver_public_key **
+  
+  Gets the encrypted secret shares shared with a requestor. 
+  
 	input: p2pFileName, approver_userid
 	output: encrypted_secret_shares_with_approver_public_key
 	
-API 6: approve request
+  **6) API 6 : Approving Requests**
+  
+  Approves a request for access of a patient  file. 
+  
 	input: p2pFileName, approver_userid, requester_userid, encrypted_secret_shares_encrypted_with_requestor_public_key
 	output: status message
 	
-API 7: create public key of user
+  **7) API 7 : User Public Key Creation**
+  
+  Creates a public key to associate with a given user id. 
+  
 	input: user_id, public_key
 	output: status message
 
 
-API 8: Get list of filenames associated with user
+  **8) API 8 : User Associated File Names**
+  
+  Gets a list of filenames associated with the user. 
+  
 	input: Username, Birthday or Ethereum address
 	output: A list of p2pFilenames in the form of one single string
 
+### III. Access Granting Example 
 To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
-### System Setup
+#### i. System Setup
 
   **1) File Owner and Immediate Trusted Parties**
   
@@ -160,11 +180,10 @@ To better illustrate and show the design of Healthshare, let us examine the foll
     - **Tony =** 456 (encrypted with Tony public key) -> encrypted_secret_share_Tony 
     - **Harrison =** 789 (encrypted with Harrison public key) -> encrypted_secret_share_Harrison
  
- ### Access Granting Example
- #### Quang's Request
+ #### ii. Quang's Request
 Quang, a 3rd party, wants and requests for access to Tony's file. To gain access, Quang needs any of the two shares in [123,456,789]. The system logs Quang's request and sends notifications to the share owners : Tony, Elgin, and Harrison asking them if they will both approve and grant Quang's access.
 
-#### Approving Share Owners
+ #### iii. Approving Share Owners
   **1) Elgin approves of Quang** 
   
    - Elgin fetches his own secret share, encrypted_secret_share_Elgin, from *Smart Contract 2*
@@ -179,5 +198,5 @@ Quang, a 3rd party, wants and requests for access to Tony's file. To gain access
   
   At this point, 2 of out of the 3 share owners have approved of Quang granting him access to Tony's file. It is no longer necessary for Harrison to approve of Quang. However, he can still approve of Quang if he desires to choose so, but as far as Quang is concerned, he now has access to Tony's file which is all that matters to him.
 
-#### Quang gets Access
+#### iv. Quang gets Access
 Once Tony and Elgin have approved and sent their secret shares to Quang, Quang sees <Tony, encrypted_secret_shares_encrypted_Quang> and <Elgin, encrypted_secret_shares_encrypted_Quang>. Using his secret key, he is able to decrypt both and receive [123] and [456] from Tony and Elgin respectively. Now holding the required 2 out of 3 shares, Quang is able to recreate and use the secret key, 123456789, to gain access to Tony's file. 
