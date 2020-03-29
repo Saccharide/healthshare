@@ -112,17 +112,21 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 ### II. APIs Needed
   **API 1 : Associating User Information**
   
+  Creates and links a patient file with <user, user birthday>
+
 	input: whatever authentication information you need <user, user birthdate>
 	output: List of p2pFileNames
 
   **API 2 : Fetching a User's Public Key**
   
+  Gets the public key associated with a user 
+
 	input: user_id
 	output: user_public_key
 
   **API 3: Approval Mappings**
   
-  Who can approve a created file 
+  Determines who can approve a patient file 
   
 	input: p2pFileName, approval_user_id, encrypted_secret_share_approver_user_id
 	output: (updates smart contract 2 and 5) status message
