@@ -145,3 +145,16 @@ HealthShare is a POC for securely sharing patient-provided information among pat
   **Search for a key**
 
     $ q [key]
+    
+### II. Healthshare's Custom Cryptography Wrapper
+#### Installation
+ **1) Install pip**
+ 
+ 	sudo apt-get install python python-pip
+	
+ **2) Install our secret sharing module**
+ 
+ 	sudo pip install secretsharing
+	
+#### Usage 
+	python2 main.py
