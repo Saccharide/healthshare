@@ -65,13 +65,13 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 HealthShare uses a series of Smart Contracts and API's to communicate between our file sharing P2P network and system log Block chains. 
 
 ### I. Smart Contracts
-  **1) Smart Contract 1 (HealthShare User): <user,birthdate> -> p2pFilename**
+  **Smart Contract 1 (HealthShare User): <user,birthdate> -> p2pFilename**
   
   This smart contract associates a HealthShare user to encrypted patient file in the P2P network. For simplicity sake, the user's file is a hash of their name and birthday which we assume to be unique.
   	
 	<Tony,01/01/2020> -> 45678afaghsjda5yui6789
 
-  **2) Smart Contract 2 (Share Owners): p2pFileName -> <approver_userid, encrypted_secret_shares_with_approver_public_key>**
+  **Smart Contract 2 (Share Owners): p2pFileName -> <approver_userid, encrypted_secret_shares_with_approver_public_key>**
   
   Smart Contract 2 both stores and represents the share owners of a patient file. It holds a mapping of the hashed P2P file name to name of the share owner and their encrypted share. 
   
@@ -79,20 +79,20 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	45678afaghsjda5yui6789 -> <Tony, encrypted_secret_share_Tony>
 	45678afaghsjda5yui6789 -> <Harrison, encrypted_secret_share_Harrison>
 
-  **3) Smart Contract 3 (Requests Smart Contract): : p2pFileName -> requestor_userid**
+  **Smart Contract 3 (Requests Smart Contract): : p2pFileName -> requestor_userid**
   
   Smart Contract 3 stores a mapping of hashed P2P file names to users who want to get access to that file.
   
 	45678afaghsjda5yui6789 -> Quang
 
-  **4) Smart Contract 4 (Approved Requesting Users) : p2pFileName -> <approver_userid, requester_userid, encrypted_secret_shares_encrypted_with_requestor_public_key>**
+  **Smart Contract 4 (Approved Requesting Users) : p2pFileName -> <approver_userid, requester_userid, encrypted_secret_shares_encrypted_with_requestor_public_key>**
   
   Smart Contract 4 stores the data regarding approved requests for a file. It maps the hashed P2P file name to a tuple of A) the user id of the approver B) the user id of the requestor and C) the secret share of the approver encrypted under the requestor's public key 
   
 	45678afaghsjda5yui6789 -> <Elgin, Quang, [123], signatureOfMessagewithElginsPrivateKey>
 	45678afaghsjda5yui6789 -> <Tony, Quang, [456], signatureOfMessagewithElginsPrivateKey>
 
-  **5) Smart Contract 5 (Share Owner's Files) : user id -> p2pFileName
+  **Smart Contract 5 (Share Owner's Files) : user id -> p2pFileName**
   
   Smart Contract 5 stores a list of patient files in which the user owns a share for. It is used in between Contracts 3 and 4 to grant a requesting user access to a patient file 
   
@@ -100,7 +100,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	Tony -> 45678afaghsjda5yui6789
 	Harrison -> 45678afaghsjda5yui6789
 
-  **6) Smart Contract 6 (Key Store): user id -> public key**
+  **Smart Contract 6 (Key Store): user id -> public key**
 
   Smart Contract 6 functions as a key store. It relates a user id with their public key. 
   
@@ -110,58 +110,58 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	Quang -> Quang_Public_Key
 
 ### II. APIs Needed
-  **1) API 1 : Associating User Information**
+  **API 1 : Associating User Information**
   
-	input: whatever authentication information you need <user, user birthdate>
-	output: List of p2pFileNames
+	**input:** whatever authentication information you need <user, user birthdate>
+	**output:** List of p2pFileNames
 
-  **2) API 2 : Fetching a User's Public Key**
+  **API 2 : Fetching a User's Public Key**
   
-	input: user_id
-	output: user_public_key
+	**input:**** user_id
+	**output:** user_public_key
 
-  **3) API 3: Approval Mappings**
+  **API 3: Approval Mappings**
   
   Who can approve a created file 
   
-	input: p2pFileName, approval_user_id, encrypted_secret_share_approver_user_id
-	output: (updates smart contract 2 and 5) status message
+	**input:** p2pFileName, approval_user_id, encrypted_secret_share_approver_user_id
+	**output:** (updates smart contract 2 and 5) status message
 	
-  **4) API 4 : Checking Pending Approval Requests**
+  **API 4 : Checking Pending Approval Requests**
   
   Checks the status of pending approval requests -- goes to Smart Contract 5, queries Smart Contract 3, and checks against Smart Contract 4 to see if a request has *already* been approved
   
-	input: -
-	output: status message
+	**input:** -
+	**output:** status message
 
-  **5) API 5 : Getting encrypted_secret_shares_with_approver_public_key **
+  **API 5 : Getting encrypted_secret_shares_with_approver_public_key**
   
   Gets the encrypted secret shares shared with a requestor. 
   
-	input: p2pFileName, approver_userid
-	output: encrypted_secret_shares_with_approver_public_key
+	**input:** p2pFileName, approver_userid
+	**output:** encrypted_secret_shares_with_approver_public_key
 	
-  **6) API 6 : Approving Requests**
+  **API 6 : Approving Requests**
   
   Approves a request for access of a patient  file. 
   
-	input: p2pFileName, approver_userid, requester_userid, encrypted_secret_shares_encrypted_with_requestor_public_key
-	output: status message
+	**input:** p2pFileName, approver_userid, requester_userid, encrypted_secret_shares_encrypted_with_requestor_public_key
+	**output:** status message
 	
-  **7) API 7 : User Public Key Creation**
+  **API 7 : User Public Key Creation**
   
   Creates a public key to associate with a given user id. 
   
-	input: user_id, public_key
-	output: status message
+	**input:** user_id, public_key
+	**output:** status message
 
 
-  **8) API 8 : User Associated File Names**
+  **API 8 : User Associated File Names**
   
   Gets a list of filenames associated with the user. 
   
-	input: Username, Birthday or Ethereum address
-	output: A list of p2pFilenames in the form of one single string
+	**input:** Username, Birthday or Ethereum address
+	**output:** A list of p2pFilenames in the form of one single string
 
 ### III. Access Granting Example 
 To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
