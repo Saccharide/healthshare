@@ -62,47 +62,6 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 	python2 main.py
 
 ## Design and Example Scenario
-To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
-### System Setup
-
-  **1) File Owner and Immediate Trusted Parties**
-  
-  - **File owner :** Tony 
-  - **File approvers:** Elgin, Tony, Harrison where 2 out of the 3 share owners are required to grant access to Tony's file
-    
-  **2) File and Related Cryptographic Details**  
-  - **File :** TonyFile.zip
-  - **Secret Key :** 123456789
-  - **Secret Shares:** [123,456,789
-    - **Elgin =** 123 (encrypted with Elgin public key) -> encrypted_secret_share_Elgin
-    - **Tony =** 456 (encrypted with Tony public key) -> encrypted_secret_share_Tony 
-    - **Harrison =** 789 (encrypted with Harrison public key) -> encrypted_secret_share_Harrison
- 
- ### Granting Example
- #### Quang's Request
-Quang, a 3rd party, wants and requests for access to Tony's file. To gain access, Quang needs any of the two shares in [123,456,789]. The system logs Quang's request and sends notifications to the share owners : Tony, Elgin, and Harrison asking them if they will both approve and grant Quang's access.
-
-#### Approving Share Owners
-  **1) Elgin approves of Quang** 
-  
-   - Elgin fetches his own secret share, encrypted_secret_share_Elgin, from *Smart Contract 2*
-   - Decrypts his own secret share to get [123] and 
-   - Then he re-encrypts [123] under Quang's public key to get encrypted_secret_shares_encrypted_Quang and stores the result in this in 	*Smart Contract 4*
-
-  **2) Tony also approves of Quang**
-  
-   - Tony fetches also fetches his own share, encrypted_secret_share_Tony, from *Smart Contract 2*
-   - Decrypts encrypted_secret_share_Tony to get [456] and 
-   - Then re-encrypts [456] under Quang's public key to get encrypted_secret_shares_encrypted_Quang and simlarly, stoers the result in *Smart Contract 4*
-  
-  At this point, 2 of out of the 3 share owners have approved of Quang granting him access to Tony's file. It is no longer necessary for Harrison to approve of Quang. However, he can still approve of Quang if he desires to choose so, but as far as Quang is concerned, he now has access to Tony's file which is all that matters to him.
-
-Quang gets both encrypted_secret_shares_encrypted_Quang
-Decrypts both encrypted_secret_shares_encrypted_Quang to get [123],[456]
-Recreates secret key 123456789
-Decrypts file
-
-
 ### Smart Contracts
 
 Smart contract 1: <user,birthdate> -> p2pFilename
@@ -168,3 +127,41 @@ API 7: create public key of user
 API 8: Get list of filenames associated with user
 	input: Username, Birthday or Ethereum address
 	output: A list of p2pFilenames in the form of one single string
+
+To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
+### System Setup
+
+  **1) File Owner and Immediate Trusted Parties**
+  
+  - **File owner :** Tony 
+  - **File approvers:** Elgin, Tony, Harrison where 2 out of the 3 share owners are required to grant access to Tony's file
+    
+  **2) File and Related Cryptographic Details**  
+  - **File :** TonyFile.zip
+  - **Secret Key :** 123456789
+  - **Secret Shares:** [123,456,789
+    - **Elgin =** 123 (encrypted with Elgin public key) -> encrypted_secret_share_Elgin
+    - **Tony =** 456 (encrypted with Tony public key) -> encrypted_secret_share_Tony 
+    - **Harrison =** 789 (encrypted with Harrison public key) -> encrypted_secret_share_Harrison
+ 
+ ### Granting Example
+ #### Quang's Request
+Quang, a 3rd party, wants and requests for access to Tony's file. To gain access, Quang needs any of the two shares in [123,456,789]. The system logs Quang's request and sends notifications to the share owners : Tony, Elgin, and Harrison asking them if they will both approve and grant Quang's access.
+
+#### Approving Share Owners
+  **1) Elgin approves of Quang** 
+  
+   - Elgin fetches his own secret share, encrypted_secret_share_Elgin, from *Smart Contract 2*
+   - Decrypts his own secret share to get [123] and 
+   - Then he re-encrypts [123] under Quang's public key to get encrypted_secret_shares_encrypted_Quang and stores the result in this in 	*Smart Contract 4*
+
+  **2) Tony also approves of Quang**
+  
+   - Tony fetches also fetches his own share, encrypted_secret_share_Tony, from *Smart Contract 2*
+   - Decrypts encrypted_secret_share_Tony to get [456] and 
+   - Then re-encrypts [456] under Quang's public key to get encrypted_secret_shares_encrypted_Quang and simlarly, stoers the result in *Smart Contract 4*
+  
+  At this point, 2 of out of the 3 share owners have approved of Quang granting him access to Tony's file. It is no longer necessary for Harrison to approve of Quang. However, he can still approve of Quang if he desires to choose so, but as far as Quang is concerned, he now has access to Tony's file which is all that matters to him.
+
+#### Quang gets Access
+Once Tony and Elgin have approved and sent their secret shares to Quang, Quang sees <Tony, encrypted_secret_shares_encrypted_Quang> and <Elgin, encrypted_secret_shares_encrypted_Quang>. Using his secret key, he is able to decrypt both and receive [123] and [456] from Tony and Elgin respectively. Now holding the required 2 out of 3 shares, Quang is able to recreate and use the secret key, 123456789, to gain access to Tony's file. 
