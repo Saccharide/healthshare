@@ -20,6 +20,13 @@ contract AccessLog {
     function getPublicKey() returns (string) {
         return publicKeys[msg.sender];
     }
+
+    /**
+    Gets the public key associated with a user 
+    @param username the username of the specified user 
+    @param birthday the birthday of the user user 
+    @return the public key associated with <username, birthday> 
+    */
     function getPublicKeyWithName(string memory username, string memory birthday) returns (string) {
         return publicKeysId[getUserName(username,birthday)];
     }
