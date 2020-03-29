@@ -6,6 +6,25 @@ contract AccessLog {
     mapping(address => string) files;
     mapping(address => bool) private hasFile;
     
+    mapping(address => string) publicKeys;
+    mapping(uint => string) publicKeysId;
+    function setPublicKey (string memory _publicKey) {
+        publicKeys[msg.sender] = _publicKey;
+    }
+    function setPublicKeyWithName (string memory username, string memory birthday, string memory _publicKey) {
+        require(publicKeys[msg.sender] == _publicKey)
+        publicKeys[getUserName(username, birthday)] = _publicKey;
+    }
+
+    // API 2
+    function getPublicKey() returns (string) {
+        return publicKeys[msg.sender];
+    }
+    function getPublicKeyWithName(string memory username, string memory birthday) returns (string) {
+        return publicKeysId[getUserName(username,birthday)];
+    }
+
+
     // mapping(address)
     event Log(
         uint timestamp,
@@ -23,8 +42,8 @@ contract AccessLog {
         _;
     }
 
-    function getFilename(string memory patientName, string memory birthday) public pure returns (uint)  {
-        return keccak256(abi.encodePacked(patientName, birthday));
+    function getUserName(string memory username, string memory birthday) public pure returns (uint)  {
+        return keccak256(abi.encodePacked(username, birthday));
     }
 
     // Adding a file to the list that is corresponding to the user
@@ -39,6 +58,7 @@ contract AccessLog {
         return string(abi.encodePacked(a, b));
     }
 
+    // API 1
     // Getting a "list" of file names: a list string that is separated with new line character
     function getFiles(address _address) public returns (string) {
         // Caller must have a file asscoiated with it
@@ -97,8 +117,8 @@ contract AccessLog {
         bytes memory targetBytes = bytes (target);
         bytes memory baseBytes = bytes (base);
 
-        bool found = false;
 
+        uint index = 0;
         // Loop through the original string
         for (uint i = 0; i < baseBytes.length - targetBytes.length; i++) {
             bool flag = true;
@@ -110,11 +130,20 @@ contract AccessLog {
 				}
 			}
             if (flag) {
-                found = true;
+                index = i;
                 break;
             }
         }
-        return found;
+        return string(abi.encodePacked(substring(base,0,index), substring(base,baseBytes.length - targetBytes.length, baseBytes.length )));
  
+    }
+    // Helper function for removing a file from list string
+    function substring(string str, uint startIndex, uint endIndex) constant returns (string) {
+        bytes memory strBytes = bytes(str);
+        bytes memory result = new bytes(endIndex-startIndex);
+        for(uint i = startIndex; i < endIndex; i++) {
+            result[i-startIndex] = strBytes[i];
+        }
+        return string(result);
     }
 }
