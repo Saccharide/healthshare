@@ -1,12 +1,14 @@
 pragma solidity >=0.4.21 <0.7.0;
 
 contract AccessLog {
+
     address private owner;
     mapping(address => string) files;
     mapping(address => bool) private hasFile;
     
     // mapping(address)
     event Log(
+        uint timestamp,
         address caller,
         uint file
     );
@@ -38,11 +40,10 @@ contract AccessLog {
     }
 
     // Getting a "list" of file names: a list string that is separated with new line character
-    function getFiles() public returns (string) {
-
+    function getFiles(address _address) public returns (string) {
         // Caller must have a file asscoiated with it
-        assert(hasFile[msg.sender]);
-        return files[msg.sender];
+        assert(hasFile[_address]);
+        return files[_address];
     }
 
     // When user tries to access a file, they must call this function to log their accesses
@@ -61,7 +62,8 @@ contract AccessLog {
         // Checks if this user contain the specified filename
         assert(contains(filename, files[msg.sender]));
 
-        // Find the index of the substring
+        // Find the index of the substring, remove the substring
+        remove(filename, files[msg.sender]);
 
     }
 
