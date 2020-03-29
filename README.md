@@ -62,18 +62,22 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 	python2 main.py
 
 ## Design and Example Scenario
-To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. 
-    * File owner: Tony
-    * File approvers: Elgin, Tony, Harrison
-You need 2 people to approve
+To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
 
-TonyFile.zip
-secret key: 123456789
-secret shares: [123,456,789]
-
-Elgin = 123 (encrypted with Elgin public key) -> encrypted_secret_share_Elgin
-Tony = 456 (encrypted with Tony public key) -> encrypted_secret_share_Tony
-Harrison = 789 (encrypted with Harrison public key) -> encrypted_secret_share_Harrison
+  **1) File Owner and Immediate Trusted Parties**
+  
+    - File owner: Tony
+    - File approvers: Elgin, Tony, Harrison 
+      where 2 out of the 3 share owners are required to grant access to Tony's file
+    
+  **2) File and Related Cryptographic Details**  
+  
+    - File : TonyFile.zip
+    - Secret Key : 123456789
+    - Secret Shares: [123,456,789]
+      - Elgin = 123 (encrypted with Elgin public key) -> encrypted_secret_share_Elgin
+      - Tony = 456 (encrypted with Tony public key) -> encrypted_secret_share_Tony 
+      - Harrison = 789 (encrypted with Harrison public key) -> encrypted_secret_share_Harrison
 
 Quang requests for file (need 2 approving)
 What Quang needs: any of the two in [123,456,789]
