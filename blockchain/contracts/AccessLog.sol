@@ -8,6 +8,9 @@ contract AccessLog {
     
     mapping(address => string) publicKeys;
     mapping(uint => string) publicKeysId;
+    mapping(uint => string) ethereum_address_dict;
+
+    // API 7
     function setPublicKey (string memory _publicKey) public {
         publicKeys[msg.sender] = _publicKey;
     }
@@ -45,6 +48,12 @@ contract AccessLog {
         return uint(keccak256(abi.encodePacked(username, birthday)));
     }
 
+    // API 9: Get Ethereum address with User's name and birthday
+    function getEthereumAdress(string memory username, string memory birthday) public pure returns (address) {
+        // TO-DO
+
+    }
+
     // Adding a file to the list that is corresponding to the user
     function addFilename(string memory fileName) public {
         hasFile[msg.sender] = true;
@@ -57,7 +66,7 @@ contract AccessLog {
         return string(abi.encodePacked(a, b));
     }
 
-    // API 1
+    // API 1 & 8
     // Getting a "list" of file names: a list string that is separated with new line character
     function getFiles(address _address) public view returns (string memory) {
         // Caller must have a file asscoiated with it
