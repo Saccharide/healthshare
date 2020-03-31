@@ -5,7 +5,7 @@ var provider = new Web3.providers.HttpProvider("http://localhost:9545");
 var web3 = new Web3(provider);
 var contract = require("@truffle/contract");
 
-var AccessLog = contract(require("/home/navieh/mypj/healthshare/blockchain/build/contracts/AccessLog.json"))
+var AccessLog = contract(require("./build/contracts/AccessLog.json"))
 
 const express = require('express')
 var bodyParser = require('body-parser')

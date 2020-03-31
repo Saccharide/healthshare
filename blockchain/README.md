@@ -29,6 +29,7 @@ Open another terminal
 
 ``` 
 cd blockchain
+# replace ACCOUNT_0 in test.py with one of the 10 accounts above
 python test.py      # should show all testcases passed
 ```
 
