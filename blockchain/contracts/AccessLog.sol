@@ -80,7 +80,6 @@ contract AccessLog {
 
     // Remove a file from that user
     function removeFile(string memory filename) public view {
-        
         // Check if this user has anyfile at all
         assert(hasFile[msg.sender]);
 

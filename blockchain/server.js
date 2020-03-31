@@ -36,6 +36,19 @@ app.post('/setPublicKey', async function (req, res) {
   });
 })
 
+app.post('/addFile', async function (req, res) {
+  res.json({
+    data: await instance.addFilename.sendTransaction(req.body.file_name, {from: req.body.user_id})
+  });
+})
+
+app.get('/getFiles', async function (req, res) {
+  var address = (req.query.user_id);
+  res.json({
+    data: await instance.getFiles.call(address)
+  });
+})
+
 main()
 
 // AccessLog.deployed().then((instance)=>{
