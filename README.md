@@ -60,7 +60,58 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 	
 #### Usage 
 	python2 main.py
+	
+### III. Truffle
+#### Installation
+ **1) Install node and npm**
+ 	
+	sudo apt-get install nodejs 
+	
+ **2) Install freeze**
+ 
+ 	sudo pip install freeze
 
+ **3) Install requests**
+ 
+ 	sudo pip install requests
+
+ **4) Install Truffle**
+ 
+ 	sudo npm install -g truffle@5.1.13
+
+#### Usage
+  **1) Switch into the "blockchain" directory of this project**
+  	
+	cd blockchain
+	
+  **2) Run npm install**
+  
+  	npm install 
+	
+  **3) Compile Truffle** 
+  	
+	truffle compile     # should show successful compilation
+	
+  **4) Launch Truffle**
+ 		
+	truffle develop	    # this launches a local blockchain, should show 10 different accounts
+	> migrate --reset   # run within truffle develop console
+
+  **5) Verify that Truffle is Running**
+ 
+ Open a new terminal and do the following
+		
+	cd blockchain
+	node server.js	    # should show listening on port 3000
+		
+Open a second terminal and do the following 
+	
+	cd blockchain       # replace ACCOUNT_0 in test.py with one of the 10 accounts above
+	python test.py      # should show all testcases passed
+
+Refer to blockchain/test.py for more on sample usage.
+		
+		
 ## Design and Example Scenario
 HealthShare uses a series of Smart Contracts and API's to communicate between our file sharing P2P network and system log Block chains. 
 
