@@ -1,7 +1,7 @@
 import requests
 
 BASE_URL = "http://localhost:3000"
-ACCOUNT_0 = "0xDE6bC281B6D3844C60A38E6F5Ed1eE8729929492"
+ACCOUNT_0 = "0x6ad49E1a1243a3B8629E47bD603c8bbc684D1147"
 
 # API 7: SET PUBLIC KEY
 res = requests.post("{}/setPublicKey".format(BASE_URL), json={
