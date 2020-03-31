@@ -1,7 +1,7 @@
 var Web3 = require("web3");
 var Web3 = require('web3');
 
-var provider = new Web3.providers.HttpProvider("http://localhost:7545");
+var provider = new Web3.providers.HttpProvider("http://localhost:9545");
 var web3 = new Web3(provider);
 var contract = require("@truffle/contract");
 
@@ -20,10 +20,6 @@ async function main() {
   accounts = await web3.eth.getAccounts();
   AccessLog.setProvider(provider);
   instance = await AccessLog.deployed();
-  console.log(accounts);
-  await instance.setPublicKey.sendTransaction("PUBKEY2XXXX", {
-    from: accounts[0]
-  });
   console.log("Server listening on port 3000");
   app.listen(3000)
 }
