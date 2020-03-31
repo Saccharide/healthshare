@@ -8,7 +8,7 @@ contract AccessLog {
     
     mapping(address => string) publicKeys;
     mapping(uint => string) publicKeysId;
-    mapping(uint => string) ethereum_address_dict;
+    mapping(uint => address) ethereum_address_dict;
 
     // API 7
     function setPublicKey (string memory _publicKey) public {
@@ -37,10 +37,10 @@ contract AccessLog {
 
     // API 9: Get Ethereum address with User's name and birthday
     function getEthereumAdress(string memory username, string memory birthday) public view returns (address) {
-         return ethereum_address_dict[keccak256(abi.encodePacked(username,birthday))];
+         return ethereum_address_dict[uint(keccak256(abi.encodePacked(username,birthday)))];
     }
     function setEthereumAdress(string memory username, string memory birthday ) public {
-        ethereum_address_dict[getUserName(username,birthday)] = msg.sender
+        ethereum_address_dict[getUserName(username,birthday)] = msg.sender;
     }
 
 
