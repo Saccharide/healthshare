@@ -17,6 +17,8 @@ contract AccessLog {
     function setPublicKeyWithName (string memory username, string memory birthday, string memory _publicKey) public {
         require(keccak256(abi.encodePacked(publicKeys[msg.sender])) == keccak256(abi.encodePacked(_publicKey)));
         publicKeysId[getUserName(username, birthday)] = _publicKey;
+        // maybe can update here
+        ethereum_address_dict[getUserName(username, birthday)] = msg.sender;
     }
 
     // API 2
@@ -31,6 +33,14 @@ contract AccessLog {
     */
     function getPublicKeyWithName(string memory username, string memory birthday) public view returns (string memory) {
         return publicKeysId[getUserName(username,birthday)];
+    }
+
+    // API 9: Get Ethereum address with User's name and birthday
+    function getEthereumAdress(string memory username, string memory birthday) public view returns (address) {
+         return ethereum_address_dict[keccak256(abi.encodePacked(username,birthday))];
+    }
+    function setEthereumAdress(string memory username, string memory birthday ) public {
+        ethereum_address_dict[getUserName(username,birthday)] = msg.sender
     }
 
 
@@ -52,12 +62,6 @@ contract AccessLog {
 
     function getUserName(string memory username, string memory birthday) public pure returns (uint)  {
         return uint(keccak256(abi.encodePacked(username, birthday)));
-    }
-
-    // API 9: Get Ethereum address with User's name and birthday
-    function getEthereumAdress(string memory username, string memory birthday) public pure returns (address) {
-        // TO-DO
-
     }
 
     // Adding a file to the list that is corresponding to the user
