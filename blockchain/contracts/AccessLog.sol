@@ -23,6 +23,12 @@ contract AccessLog {
     function getPublicKey() public view returns (string memory) {
         return publicKeys[msg.sender];
     }
+    /**
+    Gets the public key associated with a user
+    @param username the username of the specified user
+    @param birthday the birthday of the user user
+    @return the public key associated with <username, birthday>
+    */
     function getPublicKeyWithName(string memory username, string memory birthday) public view returns (string memory) {
         return publicKeysId[getUserName(username,birthday)];
     }
@@ -83,7 +89,6 @@ contract AccessLog {
 
     // Remove a file from that user
     function removeFile(string memory filename) public view {
-        
         // Check if this user has anyfile at all
         assert(hasFile[msg.sender]);
 
