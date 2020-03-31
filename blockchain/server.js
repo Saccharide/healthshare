@@ -15,6 +15,14 @@ app.use(bodyParser.json())
 var instance = null;
 var accounts = null;
 
+function str2array(s) {
+  console.log(s
+    .split("\n")
+    .filter((v, i, self) => v.length > 0 && self.indexOf(v) === i));
+  return s
+    .split("\n")
+    .filter((v, i, self) => self.indexOf(v) === i) ;
+}
 
 async function main() {
   accounts = await web3.eth.getAccounts();
@@ -45,7 +53,7 @@ app.post('/addFile', async function (req, res) {
 app.get('/getFiles', async function (req, res) {
   var address = (req.query.user_id);
   res.json({
-    data: await instance.getFiles.call(address)
+    data: str2array(await instance.getFiles.call(address))
   });
 })
 
