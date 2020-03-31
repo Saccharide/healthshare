@@ -2,6 +2,7 @@ import requests
 
 BASE_URL = "http://localhost:3000"
 ACCOUNT_0 = "0x6ad49e1a1243a3b8629e47bd603c8bbc684d1147"
+ACCOUNT_1 = "0xb38a6b63ce227fab60f33b6237bfe7934301741b"
 
 # API 7: SET PUBLIC KEY
 res = requests.post("{}/setPublicKey".format(BASE_URL), json={
@@ -47,7 +48,7 @@ res = requests.get("{}/getPublicKey?user_id={}".format(BASE_URL, ACCOUNT_0))
 # }
 assert res.json()["data"] == "MYPUBKEY"
 
-# API 9: ASSOCIATE A FILE WITH A USER
+# API 8: ASSOCIATE A FILE WITH A USER
 res = requests.post("{}/addFile".format(BASE_URL), json={
     "user_id": ACCOUNT_0,
     "file_name": "file1"
@@ -58,5 +59,17 @@ assert res.json()["data"]
 # API 1: GET FILES OF USERS
 res = requests.get("{}/getFiles?user_id={}".format(BASE_URL, ACCOUNT_0))
 assert "file1" in res.json()["data"]
+
+# API 10: SET name and birthday
+res = requests.post("{}/setDetails".format(BASE_URL), json={
+    "name": "Alice",
+    "birthday": "02/29/2020",
+    "user_id": ACCOUNT_1
+})
+assert res.json()["data"]
+
+# API 9: GET name and birthday
+res = requests.get("{}/getAddressFromDetails?name={}&birthday={}&user_id={}".format(BASE_URL, "Alice", "02/29/2020", ACCOUNT_0))
+assert res.json()["data"].lower() == ACCOUNT_1.lower()
 
 print("All testcases passed")

@@ -175,6 +175,14 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	input: (Username, Birthday)
 	output: Ethereum address
 
+
+  **API 10: Associate patient's ID details to an Ethereum Addresses**
+
+  Set the user's name and birthday to an Ethereum Block Chain address
+
+	input: (Username, Birthday)
+	output: -
+
 ### III. Access Granting Example 
 To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
 #### i. System Setup

@@ -31,7 +31,7 @@ async function main() {
 
 app.get('/getPublicKey', async function (req, res) {
   res.json({
-    data: await instance.getPublicKey.call({from: req.body.user_id})
+    data: await instance.getPublicKey.call()
   });
 })
 
@@ -51,6 +51,26 @@ app.get('/getFiles', async function (req, res) {
   var address = (req.query.user_id);
   res.json({
     data: str2array(await instance.getFiles.call(address))
+  });
+})
+
+app.post('/setDetails', async function (req, res) {
+  var address = req.body.user_id;
+  res.json({
+    data: await instance.setEthereumAdress.sendTransaction(
+      req.body.name,
+      req.body.birthday,
+      {from: address}
+    )
+  });
+})
+
+app.get('/getAddressFromDetails', async function (req, res) {
+  res.json({
+    data: await instance.getEthereumAdress.call(
+      req.query.name,
+      req.query.birthday
+    )
   });
 })
 
