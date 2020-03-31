@@ -16,9 +16,6 @@ var instance = null;
 var accounts = null;
 
 function str2array(s) {
-  console.log(s
-    .split("\n")
-    .filter((v, i, self) => v.length > 0 && self.indexOf(v) === i));
   return s
     .split("\n")
     .filter((v, i, self) => self.indexOf(v) === i) ;
