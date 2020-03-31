@@ -173,15 +173,15 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   Gets the Ethereum Block Chain address for a patient 
 
 	input: (Username, Birthday)
-	output: Ethereum address
+	output: Ethereum Address
 
 
-  **API 10: Associate patient's ID details to an Ethereum Addresses**
+  **API 10: Creating a Patient's Ethereum Address**
 
-  Set the user's name and birthday to an Ethereum Block Chain address
+  Associcates a patients username and birthday to create a corresponding Ethereum Block Chain address
 
 	input: (Username, Birthday)
-	output: -
+	output:  Ethereum Address
 
 ### III. Access Granting Example 
 To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
