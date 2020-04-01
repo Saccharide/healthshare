@@ -3,6 +3,7 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 
 ## Setup and Usage Instructions
 ### I. OpenDHT
+---
 #### Installation
    **1) Install OpenDHT dependencies**
   
