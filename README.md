@@ -1,5 +1,5 @@
 # HealthShare
-HealthShare is a POC for securely sharing patient-provided information among patients, providers, and various healthcare organizations. Although standards like Fast Healthcare Interoperability Resources (FHIR) exist for uniformly encoding patient data, there isn't a uniform or consistent platform to data from a consumer/patient standpoint. HealthShare aims to fill in that gap using a structured P2P, encrypted file sharing system backed by Blockchain technology to guarantee data authenticity and integrity. Built using OpenDHT, Ethereum, and Truffle, Healthshare is the result of Quang Huynh, Tony Tang, Elgin Lee Wei Sheng, and Harrison Banh from the Georgia Institute of Technology as their class project for Professor Ling Liu's CS 6675 Advanced Internet Computing class. 
+HealthShare is a POC for securely sharing patient-provided information among patients, providers, and various healthcare organizations. Although standards like Fast Healthcare Interoperability Resources (FHIR) exist for uniformly encoding patient data, there isn't a uniform or consistent platform to data from a consumer/patient standpoint. HealthShare aims to fill in that gap using a structured P2P, encrypted file sharing system backed by Blockchain technology to guarantee data authenticity and integrity. Built using OpenDHT, Ethereum, and Truffle, HealthShare is the result of Quang Huynh, Tony Tang, Elgin Lee Wei Sheng, and Harrison Banh from the Georgia Institute of Technology as their class project for Professor Ling Liu's CS 6675 Advanced Internet Computing class. 
 
 ## Setup and Usage Instructions
 ### I. OpenDHT
@@ -272,7 +272,7 @@ Quang, a 3rd party, wants and requests for access to Tony's file. To gain access
   
    - Tony fetches also fetches his own share, encrypted_secret_share_Tony, from *Smart Contract 2*
    - Decrypts encrypted_secret_share_Tony to get [456] and 
-   - Then re-encrypts [456] under Quang's public key to get encrypted_secret_shares_encrypted_Quang and simlarly, stoers the result in *Smart Contract 4*
+   - Then re-encrypts [456] under Quang's public key to get encrypted_secret_shares_encrypted_Quang and similarly, stores the result in *Smart Contract 4*
   
   At this point, 2 of out of the 3 share owners have approved of Quang granting him access to Tony's file. It is no longer necessary for Harrison to approve of Quang. However, he can still approve of Quang if he desires to choose so, but as far as Quang is concerned, he now has access to Tony's file which is all that matters to him.
 
