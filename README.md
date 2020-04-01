@@ -4,7 +4,7 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 ## Setup and Usage Instructions
 ### I. OpenDHT
 #### Installation
-  **1) Install OpenDHT dependencies**
+   **1) Install OpenDHT dependencies**
   
     sudo apt install libncurses5-dev libreadline-dev nettle-dev libgnutls28-dev libargon2-0-dev libmsgpack-dev librest
 
@@ -49,6 +49,7 @@ HealthShare is a POC for securely sharing patient-provided information among pat
     $ q [key]
     
 ### II. Healthshare's Custom Cryptography Wrapper
+---
 #### Installation
  **1) Install pip**
  
@@ -62,6 +63,7 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 	python2 main.py
 	
 ### III. Truffle
+---
 #### Installation
  **1) Install node and npm**
  	
@@ -116,6 +118,7 @@ Refer to blockchain/test.py for more on sample usage.
 HealthShare uses a series of Smart Contracts and API's to communicate between our file sharing P2P network and system log Block chains. 
 
 ### I. Smart Contracts
+---
   **Smart Contract 1 (HealthShare User) : <user,birthdate> -> p2pFilename**
   
   This smart contract associates a HealthShare user to encrypted patient file in the P2P network. For simplicity sake, the user's file is a hash of their name and birthday which we assume to be unique.
@@ -161,6 +164,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	Quang -> Quang_Public_Key
 
 ### II. APIs Needed
+---
   **API 1 : Associating User Information**
   
   Creates and links a patient file with <user, user birthday>
@@ -235,6 +239,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	output: Ethereum Address
 
 ### III. Access Granting Example 
+---
 To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
 #### i. System Setup
 
@@ -255,6 +260,7 @@ To better illustrate and show the design of Healthshare, let us examine the foll
 Quang, a 3rd party, wants and requests for access to Tony's file. To gain access, Quang needs any of the two shares in [123,456,789]. The system logs Quang's request and sends notifications to the share owners : Tony, Elgin, and Harrison asking them if they will both approve and grant Quang's access.
 
  #### iii. Approving Share Owners
+ 
   **1) Elgin approves of Quang** 
   
    - Elgin fetches his own secret share, encrypted_secret_share_Elgin, from *Smart Contract 2*
