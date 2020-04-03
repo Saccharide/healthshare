@@ -112,7 +112,7 @@ Open a second terminal and do the following
 	cd blockchain       # replace ACCOUNT_0 in test.py with one of the 10 accounts above
 	python test.py      # should show all testcases passed
 
-Refer to blockchain/test.py for more on sample usage.
+Refer to blockchain/test.py for more on sample usage, and https://github.com/Saccharide/playing-with-truffle for information on the development process.
 		
 		
 ## Design and Example Scenario
