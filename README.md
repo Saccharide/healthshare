@@ -1,10 +1,11 @@
 # HealthShare
-HealthShare is a POC for securely sharing patient-provided information among patients, providers, and various healthcare organizations. Although standards like Fast Healthcare Interoperability Resources (FHIR) exist for uniformly encoding patient data, there isn't a uniform or consistent platform to data from a consumer/patient standpoint. HealthShare aims to fill in that gap using a structured P2P, encrypted file sharing system backed by Blockchain technology to guarantee data authenticity and integrity. Built using OpenDHT, Ethereum, and Truffle, Healthshare is the result of Quang Huynh, Tony Tang, Elgin Lee Wei Sheng, and Harrison Banh from the Georgia Institute of Technology as their class project for Professor Ling Liu's CS 6675 Advanced Internet Computing class. 
+HealthShare is a POC for securely sharing patient-provided information among patients, providers, and various healthcare organizations. Although standards like Fast Healthcare Interoperability Resources (FHIR) exist for uniformly encoding patient data, there isn't a uniform or consistent platform to data from a consumer/patient standpoint. HealthShare aims to fill in that gap using a structured P2P, encrypted file sharing system backed by Blockchain technology to guarantee data authenticity and integrity. Built using OpenDHT, Ethereum, and Truffle, HealthShare is the result of Quang Huynh, Tony Tang, Elgin Lee Wei Sheng, and Harrison Banh from the Georgia Institute of Technology as their class project for Professor Ling Liu's CS 6675 Advanced Internet Computing class. 
 
 ## Setup and Usage Instructions
 ### I. OpenDHT
+---
 #### Installation
-  **1) Install OpenDHT dependencies**
+   **1) Install OpenDHT dependencies**
   
     sudo apt install libncurses5-dev libreadline-dev nettle-dev libgnutls28-dev libargon2-0-dev libmsgpack-dev librest
 
@@ -49,6 +50,7 @@ HealthShare is a POC for securely sharing patient-provided information among pat
     $ q [key]
     
 ### II. Healthshare's Custom Cryptography Wrapper
+---
 #### Installation
  **1) Install pip**
  
@@ -60,11 +62,64 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 	
 #### Usage 
 	python2 main.py
+	
+### III. Truffle
+---
+#### Installation
+ **1) Install node and npm**
+ 	
+	sudo apt-get install nodejs 
+	
+ **2) Install freeze**
+ 
+ 	sudo pip install freeze
 
+ **3) Install requests**
+ 
+ 	sudo pip install requests
+
+ **4) Install Truffle**
+ 
+ 	sudo npm install -g truffle@5.1.13
+
+#### Usage
+  **1) Switch into the "blockchain" directory of this project**
+  	
+	cd blockchain
+	
+  **2) Run npm install**
+  
+  	npm install 
+	
+  **3) Compile Truffle** 
+  	
+	truffle compile     # should show successful compilation
+	
+  **4) Launch Truffle**
+ 		
+	truffle develop	    # this launches a local blockchain, should show 10 different accounts
+	> migrate --reset   # run within truffle develop console
+
+  **5) Verify that Truffle is Running**
+ 
+ Open a new terminal and do the following
+		
+	cd blockchain
+	node server.js	    # should show listening on port 3000
+		
+Open a second terminal and do the following 
+	
+	cd blockchain       # replace ACCOUNT_0 in test.py with one of the 10 accounts above
+	python test.py      # should show all testcases passed
+
+Refer to blockchain/test.py for more on sample usage, and https://github.com/Saccharide/playing-with-truffle for information on the development process.
+		
+		
 ## Design and Example Scenario
 HealthShare uses a series of Smart Contracts and API's to communicate between our file sharing P2P network and system log Block chains. 
 
 ### I. Smart Contracts
+---
   **Smart Contract 1 (HealthShare User) : <user,birthdate> -> p2pFilename**
   
   This smart contract associates a HealthShare user to encrypted patient file in the P2P network. For simplicity sake, the user's file is a hash of their name and birthday which we assume to be unique.
@@ -110,7 +165,10 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	Quang -> Quang_Public_Key
 
 ### II. APIs Needed
+---
   **API 1 : Associating User Information**
+  
+  Status: done
   
   Creates and links a patient file with <user, user birthday>
 
@@ -118,6 +176,8 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	output: List of p2pFileNames
 
   **API 2 : Fetching a User's Public Key**
+  
+  Status: done
   
   Gets the public key associated with a user 
 
@@ -154,6 +214,8 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	
   **API 7 : User Public Key Creation**
   
+  Status: done
+  
   Creates a public key to associate with a given user id. 
   
 	input: user_id, public_key
@@ -162,28 +224,35 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 8 : User Associated File Names**
   
+  Status: done
+  
   Gets a list of filenames associated with the user. 
   
 	input: Username, Birthday or Ethereum address
 	output: A list of p2pFilenames in the form of one single string
 
 
-  **API 9: Getting Ethereum Addresses**
+  **API 9 : Getting Ethereum Addresses**
+  
+  Status: done
 
   Gets the Ethereum Block Chain address for a patient 
 
 	input: (Username, Birthday)
-	output: Ethereum address
+	output: Ethereum Address
 
 
-  **API 10: Associate patient's ID details to an Ethereum Addresses**
+  **API 10: Creating a Patient's Ethereum Address**
+  
+  Status: done
 
-  Set the user's name and birthday to an Ethereum Block Chain address
+  Links and creates an Ethereum Block Chain address to a patient's username and birthday.
 
 	input: (Username, Birthday)
-	output: -
+	output: Ethereum Address
 
 ### III. Access Granting Example 
+---
 To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
 #### i. System Setup
 
@@ -204,6 +273,7 @@ To better illustrate and show the design of Healthshare, let us examine the foll
 Quang, a 3rd party, wants and requests for access to Tony's file. To gain access, Quang needs any of the two shares in [123,456,789]. The system logs Quang's request and sends notifications to the share owners : Tony, Elgin, and Harrison asking them if they will both approve and grant Quang's access.
 
  #### iii. Approving Share Owners
+ 
   **1) Elgin approves of Quang** 
   
    - Elgin fetches his own secret share, encrypted_secret_share_Elgin, from *Smart Contract 2*
@@ -214,7 +284,7 @@ Quang, a 3rd party, wants and requests for access to Tony's file. To gain access
   
    - Tony fetches also fetches his own share, encrypted_secret_share_Tony, from *Smart Contract 2*
    - Decrypts encrypted_secret_share_Tony to get [456] and 
-   - Then re-encrypts [456] under Quang's public key to get encrypted_secret_shares_encrypted_Quang and simlarly, stoers the result in *Smart Contract 4*
+   - Then re-encrypts [456] under Quang's public key to get encrypted_secret_shares_encrypted_Quang and similarly, stores the result in *Smart Contract 4*
   
   At this point, 2 of out of the 3 share owners have approved of Quang granting him access to Tony's file. It is no longer necessary for Harrison to approve of Quang. However, he can still approve of Quang if he desires to choose so, but as far as Quang is concerned, he now has access to Tony's file which is all that matters to him.
 
