@@ -186,8 +186,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 3: Approval Mappings**
   
-  Status: done
-  
   Determines who can approve a patient file 
   
 	input: p2pFileName, approval_user_id, encrypted_secret_share_approver_user_id
