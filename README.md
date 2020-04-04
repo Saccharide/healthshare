@@ -248,14 +248,15 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   Links and creates an Ethereum Block Chain address to a patient's username and birthday.
 
-	input: (requester_userid, p2pFileName)
-	output: p2p file request
+	input: (Username, Birthday)
+	output:  Ethereum Address
 	
   **API 11 : Request Authorization** 
   
   Creates an authorization for a patient file 
   
-  	input : (Requester Username, 
+  	input : (Requester Username, p2pFileName)
+	output : p2p file request
 
 ### III. Access Granting Example 
 ---
