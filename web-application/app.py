@@ -3,22 +3,41 @@ from flask_sqlalchemy import SQLAlchemy
 from crypto import *
 from werkzeug.utils import secure_filename
 import os
+import requests
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
+# These variables are for testing, will be dynamic in the future when more APIs available
+ACCOUNT_0 = "0x06f47c9896f0e953af35320d61f020e8401002bc"
+BASE_URL = "http://localhost:3000"
 
 class User(db.Model):
     """ Create user table"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(80))
+    private_key = db.Column(db.String(200))
+    public_key = db.Column(db.String(200))
+    name = db.Column(db.String(80))
+    birthday = db.Column(db.String(80))
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, private_key, public_key):
         self.username = username
         self.password = password
+        self.private_key = private_key
+        self.public_key = public_key
+        #set for testing purposes
+        self.name = username
+        self.birthday = "01/01/1990"
 
+# API 1: GET FILES OF USERS
+# Input: Blockchain Userid
+# Output: List of files related to the user
+def API_1():
+    res = requests.get("{}/getFiles?user_id={}".format(BASE_URL, ACCOUNT_0))
+    return res.json()
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -53,8 +72,18 @@ def login():
 @app.route('/view/', methods=['GET', 'POST'])
 def view():
     """View Form"""
-    items_list = [{'File Name': 'HelloWorld.zip', 'Date Created': '24/11/2020', 'Actions': {'icon': 'fa fa-plus', 'text': 'Open'}},
-          {'File Name': 'WorldHello.zip', 'Date Created': '30/11/2020', 'Actions': {'icon': '#', 'text': 'Open'}}]
+    file_list = API_1()
+
+    items_list = []
+
+    for file in file_list["data"]:
+        print(file)
+        if file != '':
+            item = {'File Name': file, 'Date Created': '-', 'Actions': {'icon': 'fa fa-plus', 'text': 'Open'}}
+            items_list.append(item)
+
+    #items_list = [{'File Name': 'HelloWorld.zip', 'Date Created': '24/11/2020', 'Actions': {'icon': 'fa fa-plus', 'text': 'Open'}},
+    #      {'File Name': 'WorldHello.zip', 'Date Created': '30/11/2020', 'Actions': {'icon': '#', 'text': 'Open'}}]
     return render_template('view.html', data=session['username'], columns=['File Name', 'Date Created', 'Actions'], items=items_list)
 
 @app.route('/uploadfile/', methods=['GET', 'POST'])
@@ -65,9 +94,17 @@ def uploadfile():
 def register():
     """Register Form"""
     if request.method == 'POST':
+
+        private_key, public_key = generate_RSA()
+        print("Private key:" + str(private_key))
+        print("Public key:" + str(public_key))
+
         new_user = User(
             username=request.form['username'],
-            password=request.form['password'])
+            password=request.form['password'],
+            private_key=private_key,
+            public_key=public_key)
+
         db.session.add(new_user)
         db.session.commit()
         return render_template('login.html')
