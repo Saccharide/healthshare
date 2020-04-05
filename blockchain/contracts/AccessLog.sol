@@ -185,7 +185,7 @@ contract AccessLog {
 
 /******************************************************************************** 
 *                                                                               *
-* Part 3: Request related functions                                             *
+* Part 3: Setting up secret shares                                              *
 *                                                                               *
 ********************************************************************************/
     
@@ -216,11 +216,22 @@ contract AccessLog {
     }
 
     // API 5: Get encrypted secret share with approver's public key
-    function getApproverSecret(string memory filename, address approverId) public view returns (strings memory) {
+    function getApproverSecret(string memory filename, address approverId) public view returns (string memory) {
         return approval_dict[filename].secrets_shares[approverId];
     }
 
 
+/******************************************************************************** 
+*                                                                               *
+* Part 4: Requsting a file                                                      *
+*                                                                               *
+********************************************************************************/
+
+
+    // API 11: Putting in a request for a file
+    // function request(string memory filename, address requester_id ) public returns (string memory){
+
+    // }
 
 
 
