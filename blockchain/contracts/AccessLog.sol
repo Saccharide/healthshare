@@ -39,6 +39,7 @@ contract AccessLog {
     function getEthereumAdress(string memory username, string memory birthday) public view returns (address) {
          return ethereum_address_dict[uint(keccak256(abi.encodePacked(username,birthday)))];
     }
+    // API 10:
     function setEthereumAdress(string memory username, string memory birthday ) public {
         ethereum_address_dict[getUserName(username,birthday)] = msg.sender;
     }

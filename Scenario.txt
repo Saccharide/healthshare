@@ -1,0 +1,74 @@
+Scenario 1: Set approving authority
+You have p2pFilename, requestor username, requestor birthday
+Front end would generate the shares required
+
+For each approver:
+	API 9 - (requestor username, requestor birthday) -> (ethereum address/approver_id)
+	API 2 - (approver_id) -> (approver_public_key)
+	Front end would encrypt share with relevant approver_public_key
+	API 3 - (approver_id, p2pFilename, encrypted_share) -> status message/successful upload message
+
+Scenario 2: Sending a Request
+You have patients username, patients birthdate
+API 1 - (patients username, patients birthdate) -> list_of_patient_files
+
+for file_name in list_of_patient_files:
+	API 11 - (requestor_id, file_name) -> status message/request successfully posted
+	//I AM ASKING FOR REQUEST, I SHALL PUT IT ON THIS BOARD
+	
+Scenario 3: Approve Request
+Approving user logs in
+Front end calls API 4 with the approving user user_id (just logged in)
+
+what does API 4 actually do in the background?
+Take approver_user_id
+
+files_approval_list = {}
+
+for each item in global_request_board:
+	check if I have authority to approve?
+		add item to files_approval_list
+
+	
+	if I have authority:
+		have I approved it before? (p2pFileName, approver_userid, requester_userid)
+		set item status to approved
+	else:
+		set item status to pending
+		
+return files_approval_list
+		
+I approve a request what happens?
+...get encrypted share (API 5)... get requestor public key... decrypt encrypted share... reencrypt share with requestor public key
+API 6: (p2pFileName, requester_userid, approver_userid, file_encrypted_with_requestor_public_key) 
+-> Status Message/Approval has been successfully added
+
+global_approval_board
+p2pFileName		Requester	Approver	Encrypted Share
+helloworld.zip	elgin		tony		123456789
+helloworld.zip	elgin		quang		876845323
+return.zip		elgin		tony		567894546
+
+Scenario 4: Knowing the approval has been given
+requester logs in now after approval has been given
+API 14: (requester_userid) -> file_request_list
+
+file_request_list = {}
+
+for each row in global_approval_board:
+	list_of_encrypted_shares = []
+	am I the requestor (elgin)?
+		add file_encrypted_with_requestor_public_key to list_of_encrypted_shares (add 123456789 and 876845323 to the list)
+	add <p2pFileName,list_of_encrypted_shares> into file_request_list
+	
+return file_request_list
+
+{"helloworld.zip": [123456789,876845323], "return.zip" : [567894546]}
+
+
+file_a.zip
+approving = [tony,elgin,mom]
+need = 2 to decrypt
+tony and elgin has already approved
+mom logs in
+mom approves
