@@ -2,7 +2,37 @@ pragma solidity >=0.4.21 <0.7.0;
 
 contract AccessLog {
 
+
+
+/************************************************************************************ 
+*                                                                                   *
+*   Defaults                                                                        *
+*                                                                                   *
+************************************************************************************/
+
     address private owner;
+    // mapping(address)
+    event Log(
+        address caller,
+        uint file
+    );
+
+    constructor() public {
+        owner = msg.sender;
+    }
+
+    // Check if caller is owner of the contract
+    modifier isOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+    
+
+/************************************************************************************ 
+*                                                                                   *
+* Part 1: Initial User Creation Related Functions                                   *
+*                                                                                   *
+************************************************************************************/
     mapping(address => string) files;
     mapping(address => bool) private hasFile;
     
@@ -22,9 +52,6 @@ contract AccessLog {
     }
 
     // API 2
-    function getPublicKey() public view returns (string memory) {
-        return publicKeys[msg.sender];
-    }
     /**
     Gets the public key associated with a user
     @param username the username of the specified user
@@ -34,47 +61,34 @@ contract AccessLog {
     function getPublicKeyWithName(string memory username, string memory birthday) public view returns (string memory) {
         return publicKeysId[getUserName(username,birthday)];
     }
+    function getPublicKey() public view returns (string memory) {
+        return publicKeys[msg.sender];
+    }
 
     // API 9: Get Ethereum address with User's name and birthday
     function getEthereumAdress(string memory username, string memory birthday) public view returns (address) {
          return ethereum_address_dict[uint(keccak256(abi.encodePacked(username,birthday)))];
     }
-    // API 10:
+    // API 10: Associated a username with Ethereum Address
     function setEthereumAdress(string memory username, string memory birthday ) public {
         ethereum_address_dict[getUserName(username,birthday)] = msg.sender;
-    }
-
-
-    // mapping(address)
-    event Log(
-        address caller,
-        uint file
-    );
-
-    constructor() public {
-        owner = msg.sender;
-    }
-
-    // Check if caller is owner of the contract
-    modifier isOwner() {
-        require(msg.sender == owner);
-        _;
     }
 
     function getUserName(string memory username, string memory birthday) public pure returns (uint)  {
         return uint(keccak256(abi.encodePacked(username, birthday)));
     }
 
-    // Adding a file to the list that is corresponding to the user
+
+/************************************************************************************ 
+*                                                                                   *
+* Part 2: File manipulation with user id                                            *
+*                                                                                   *
+************************************************************************************/
+    // API 12: Adding a file to the list that is corresponding to the user
     function addFilename(string memory fileName) public {
         hasFile[msg.sender] = true;
         string memory temp = append("\n", fileName);
         files[msg.sender] = append(files[msg.sender], temp);
-    }
-
-    // Helper function to join two strings
-    function append(string memory a, string memory b) internal pure returns (string memory) {
-        return string(abi.encodePacked(a, b));
     }
 
     // API 1 & 8
@@ -85,14 +99,7 @@ contract AccessLog {
         return files[_address];
     }
 
-    // When user tries to access a file, they must call this function to log their accesses
-    function log(uint file) public payable {
-        // Caller must have a file asscoiated with it
-        assert(hasFile[msg.sender]);
-        emit Log(msg.sender, file);
-    }
-
-    // Remove a file from that user
+    // API 13: Remove a file from that user
     function removeFile(string memory filename) public view {
         // Check if this user has anyfile at all
         assert(hasFile[msg.sender]);
@@ -103,6 +110,18 @@ contract AccessLog {
         // Find the index of the substring, remove the substring
         remove(filename, files[msg.sender]);
 
+    }
+
+    // Helper function to join two strings
+    function append(string memory a, string memory b) internal pure returns (string memory) {
+        return string(abi.encodePacked(a, b));
+    }
+
+    // When user tries to access a file, they must call this function to log their accesses
+    function log(uint file) public payable {
+        // Caller must have a file asscoiated with it
+        assert(hasFile[msg.sender]);
+        emit Log(msg.sender, file);
     }
 
     // Helper function to find a substring
@@ -135,7 +154,6 @@ contract AccessLog {
         bytes memory targetBytes = bytes (target);
         bytes memory baseBytes = bytes (base);
 
-
         uint index = 0;
         // Loop through the original string
         for (uint i = 0; i < baseBytes.length - targetBytes.length; i++) {
@@ -164,4 +182,40 @@ contract AccessLog {
         }
         return string(result);
     }
+
+/******************************************************************************** 
+*                                                                               *
+* Part 3: Request related functions                                             *
+*                                                                               *
+********************************************************************************/
+    
+    struct File {
+        address[] approvers;
+        mapping(address => string) secrets_shares;
+    }
+    mapping(string => File) approval_dict;
+
+    // API 3: Establish a mapping for a file name and an approver
+    function setApprover(string memory filename, address approverId, string memory encrypted_secret_share) public returns (string memory) {
+        approval_dict[filename].approvers = approverId;
+        approval_dict[filename].secrets_shares[approverId] = encrypted_secret_share;
+        return "Success";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
