@@ -195,7 +195,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   
   Checks the status of pending approval requests -- goes to Smart Contract 5, queries Smart Contract 3, and checks against Smart Contract 4 to see if a request has *already* been approved
   
-	input: -
+	input: approval_user_id
 	output: status message
 
   **API 5 : Getting encrypted_secret_shares_with_approver_public_key**
