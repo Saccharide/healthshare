@@ -229,7 +229,7 @@ contract AccessLog {
 
     struct Request {
         string filename;
-        address from;
+        address requester;
         uint timestamp;
     }
     mapping(address => Request[]) request_board_dict;
@@ -238,7 +238,7 @@ contract AccessLog {
     // API 11: Putting in a request for a file
     function requestFile(string memory _filename) public returns (string memory) {
 
-        Request memory new_request = Request({filename: _filename, from:msg.sender, timestamp: now});
+        Request memory new_request = Request({filename: _filename, requester:msg.sender, timestamp: now});
 
         // Adding request to request board
         request_board.push(new_request);
@@ -270,5 +270,51 @@ contract AccessLog {
 
         return approval_list;
     }
+
+    struct Approval {
+        string filename;
+        address requester;
+        address approver;
+        string encrypted_secret;
+        uint timestamp;
+    }
+    mapping(address => Approval[]) approval_board_dict;
+    Approval[] approval_board;
+
+    // API 6: Approving a file
+    function approve(string memory _filename, address _requester, string memory _encrypted_share) public returns (string memory) {
+    
+        Approval memory temp = Approval({filename: _filename, requester: _requester, approver: msg.sender, encrypted_secret: _encrypted_share, timestamp: now});
+        approval_board.push(temp);
+        approval_board_dict[msg.sender].push(temp);
+        return "Approved and added to the approve board";
+    }
+
+
+
+
+//    // API 14: get list of files and encrypted secret share that I requested
+//    function getApprovableList() public view returns (string memory) {
+//        
+//        string memory approval_list = "";
+//        for(uint i = 0; i < request_board.length; i++ ){
+//            string memory _filename  = request_board[i].filename;
+//
+//            address[] memory approver_list = approval_dict[_filename].approvers;
+//            bool found = false;
+//            for(uint j = 0; j < approver_list.length; j++ ){
+//                if (approver_list[j] == msg.sender) {
+//                    found  = true;
+//                }
+//            }
+//            if (found){
+//                approval_list = append(approval_list, _filename);
+//                approval_list = append(approval_list, ";");
+//            }
+//        }
+//
+//        return approval_list;
+//    }
+//
 
 }
