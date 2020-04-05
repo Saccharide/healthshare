@@ -293,28 +293,24 @@ contract AccessLog {
 
 
 
-//    // API 14: get list of files and encrypted secret share that I requested
-//    function getApprovableList() public view returns (string memory) {
-//        
-//        string memory approval_list = "";
-//        for(uint i = 0; i < request_board.length; i++ ){
-//            string memory _filename  = request_board[i].filename;
-//
-//            address[] memory approver_list = approval_dict[_filename].approvers;
-//            bool found = false;
-//            for(uint j = 0; j < approver_list.length; j++ ){
-//                if (approver_list[j] == msg.sender) {
-//                    found  = true;
-//                }
-//            }
-//            if (found){
-//                approval_list = append(approval_list, _filename);
-//                approval_list = append(approval_list, ";");
-//            }
-//        }
-//
-//        return approval_list;
-//    }
-//
+    // API 14: get list of files and encrypted secret share that I requested
+    function getApprovedListSecrets() public view returns (string memory) {
+        
+        string memory approval_list_result = "{";
+        for(uint i = 0; i < approval_board.length; i++ ){
+
+            // If I am the requester of this Approval item
+            if (approval_board[i].requester == msg.sender) {
+                approval_list_result = append(approval_list_result, approval_board[i].filename);
+                approval_list_result = append(approval_list_result, ":");
+                approval_list_result = append(approval_list_result, approval_board[i].encrypted_secret);
+                approval_list_result = append(approval_list_result, ";");
+
+            }
+        }
+
+        return approval_list_result;
+    }
+
 
 }
