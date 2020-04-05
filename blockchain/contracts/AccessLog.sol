@@ -208,14 +208,16 @@ contract AccessLog {
         }
         if (exisit == false) {
             approval_dict[filename].approvers.push(approverId);
-            approval_dict[filename].secrets_shares[approverId] = encrypted_secret_share;
         }
 
-        else {
-            // Updating an exisiting account with a new encrypted_secret_share
-            approval_dict[filename].secrets_shares[approverId] = encrypted_secret_share;
-        }
+        // Updating an exisiting account with a new encrypted_secret_share
+        approval_dict[filename].secrets_shares[approverId] = encrypted_secret_share;
         return "Success";
+    }
+
+    // API 5: Get encrypted secret share with approver's public key
+    function getApproverSecret(string memory filename, address approverId) public view returns (strings memory) {
+        return approval_dict[filename].secrets_shares[approverId];
     }
 
 
