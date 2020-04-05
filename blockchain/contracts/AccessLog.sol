@@ -197,8 +197,24 @@ contract AccessLog {
 
     // API 3: Establish a mapping for a file name and an approver
     function setApprover(string memory filename, address approverId, string memory encrypted_secret_share) public returns (string memory) {
-        approval_dict[filename].approvers = approverId;
-        approval_dict[filename].secrets_shares[approverId] = encrypted_secret_share;
+
+        bool exisit = false;
+        // Check if the associated user is alredy in the list of approvers
+        for (uint i = 0; i < approval_dict[filename].approvers.length; i++){
+            if (approval_dict[filename].approvers[i] == approverId) {
+               exisit = true;
+               break;
+            }
+        }
+        if (exisit == false) {
+            approval_dict[filename].approvers.push(approverId);
+            approval_dict[filename].secrets_shares[approverId] = encrypted_secret_share;
+        }
+
+        else {
+            // Updating an exisiting account with a new encrypted_secret_share
+            approval_dict[filename].secrets_shares[approverId] = encrypted_secret_share;
+        }
         return "Success";
     }
 
