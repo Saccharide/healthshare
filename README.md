@@ -258,7 +258,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   input : (Requester Username, p2pFileName)
 	output : p2p file request
 
-  **Verification and Testing***
+  **Verification and Testing**
 
   To verify that the APIs are all functioning correctly between the web
   front-end and multiple backend Block Chains, consider running test/test.py. 
