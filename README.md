@@ -230,7 +230,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	output: status message
 
 
-  **API 8 : User Associated File Names**
+  **API 8 : GET User Associated File Names**
   
   Status: done
   
@@ -267,6 +267,30 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   
   	input : (requester_userid, p2pFileName)
 	output : p2p file request
+
+  **API 12 : Add files to User account** 
+
+  Status: done
+  Add a file to the associated  user. 
+  
+	input: Ethereum address
+	output: n/a 
+
+  **API 13 : Delete a file from a user account** 
+
+  Status: done
+  Delete a file associated with a user. 
+  
+	input:  Ethereum address
+	output: n/a
+
+  **API 14 : Get list of files with secret share** 
+
+  Status: done
+  Gets a list of files that I got approved by someone. 
+  
+	input: Ethereum address
+	output: A list of p2pFilenames with encrypted secret share in the form of one single string
 
   **Verification and Testing**
 
