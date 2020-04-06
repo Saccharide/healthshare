@@ -92,4 +92,11 @@ assert res.json()["data"]
 res = requests.get("{}/getApproverSecret?filename={}&approver_id={}".format(BASE_URL, "file1", ACCOUNT_1))
 assert res.json()["data"] == "SECRET_SHARE1"
 
+# API 11: REQUEST to access a file
+res = requests.post("{}/requestFile".format(BASE_URL), json={
+    "filename": "file1",
+    "user_id": ACCOUNT_1
+})
+assert res.json()["data"]
+
 print("All testcases passed")

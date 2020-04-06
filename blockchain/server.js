@@ -95,6 +95,16 @@ app.get('/getApproverSecret', async function (req, res) {
     )
   });
 })
+
+app.post('/requestFile', async function (req, res) {
+  res.json({
+    data: await instance.requestFile.sendTransaction(
+      req.body.filename,
+      {from: req.body.user_id}
+    )
+  });
+})
+
 main()
 
 // AccessLog.deployed().then((instance)=>{
