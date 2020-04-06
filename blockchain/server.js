@@ -76,7 +76,6 @@ app.get('/getAddressFromDetails', async function (req, res) {
 })
 
 app.post('/setApprover', async function (req, res) {
-  console.log(req.body);
   res.json({
     data: await instance.setApprover.sendTransaction(
       req.body.filename,
@@ -87,6 +86,15 @@ app.post('/setApprover', async function (req, res) {
   });
 })
 
+
+app.get('/getApproverSecret', async function (req, res) {
+  res.json({
+    data: await instance.getApproverSecret.call(
+      req.query.filename,
+      req.query.approver_id
+    )
+  });
+})
 main()
 
 // AccessLog.deployed().then((instance)=>{

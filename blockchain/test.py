@@ -82,4 +82,8 @@ res = requests.post("{}/setApprover".format(BASE_URL), json={
 })
 assert res.json()["data"]
 
+# API 5: GET approver secret
+res = requests.get("{}/getApproverSecret?filename={}&approver_id={}".format(BASE_URL, "file1", ACCOUNT_1))
+assert res.json()["data"] == "SECRET_SHARE1"
+
 print("All testcases passed")
