@@ -255,8 +255,11 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   
   Creates an authorization for a patient file 
   
-  	input : (Requester Username, p2pFileName)
+  input : (Requester Username, p2pFileName)
 	output : p2p file request
+
+  To verify that the APIs are all functioning correctly between the web
+  front-end and multiple backend Block Chains, consider running test/test.py. 
 
 ### III. Access Granting Example 
 ---
