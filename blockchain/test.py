@@ -83,14 +83,14 @@ assert res.json()["data"].lower() == ACCOUNT_1.lower()
 res = requests.post("{}/setApprover".format(BASE_URL), json={
     "filename": "file1",
     "approver_id": ACCOUNT_1,
-    "encrypted_secret_share": "SECRET_SHARE1",
+    "encrypted_secret_share": "ENCRYPTED_SECRET_SHARE1",
     "user_id": ACCOUNT_0
 })
 assert res.json()["data"]
 
 # API 5: GET approver secret
 res = requests.get("{}/getApproverSecret?filename={}&approver_id={}".format(BASE_URL, "file1", ACCOUNT_1))
-assert res.json()["data"] == "SECRET_SHARE1"
+assert res.json()["data"] == "ENCRYPTED_SECRET_SHARE1"
 
 # API 11: REQUEST to access a file
 res = requests.post("{}/requestFile".format(BASE_URL), json={
@@ -102,5 +102,21 @@ assert res.json()["data"]
 # API 4: GET approver list
 res = requests.get("{}/getApprovableList?user_id={}".format(BASE_URL, ACCOUNT_1))
 assert 'file1' in res.json()["data"]
+
+# API 6: APPROVE a file
+res = requests.post("{}/approve".format(BASE_URL), json={
+    "filename": "file1",
+    "requestor": ACCOUNT_0,
+    "encrypted_share": "SECRET_SHARE1",
+    "user_id": ACCOUNT_1
+})
+assert res.json()["data"]
+
+# API 4: GET approver list
+res = requests.get("{}/getApprovedListSecrets?user_id={}".format(BASE_URL, ACCOUNT_0))
+assert [d
+        for d in res.json()["data"]
+        if d["filename"] == "file1" and d["secret_share"] == "SECRET_SHARE1"
+        ]
 
 print("All testcases passed")

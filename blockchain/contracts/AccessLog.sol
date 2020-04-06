@@ -295,8 +295,7 @@ contract AccessLog {
 
     // API 14: get list of files and encrypted secret share that I requested
     function getApprovedListSecrets() public view returns (string memory) {
-        
-        string memory approval_list_result = "{";
+        string memory approval_list_result = "";
         for(uint i = 0; i < approval_board.length; i++ ){
 
             // If I am the requester of this Approval item

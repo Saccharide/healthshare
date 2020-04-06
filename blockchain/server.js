@@ -99,6 +99,15 @@ app.get('/getApproverSecret', async function (req, res) {
   });
 })
 
+app.get('/getApprovableList', async function (req, res) {
+  var results = await instance.getApprovableList.call(
+      {from: req.query.user_id}
+    );
+  res.json({
+    data: str2array(results, ";")
+  });
+})
+
 app.post('/requestFile', async function (req, res) {
   res.json({
     data: await instance.requestFile.sendTransaction(
@@ -108,12 +117,31 @@ app.post('/requestFile', async function (req, res) {
   });
 })
 
-app.get('/getApprovableList', async function (req, res) {
-  var results = await instance.getApprovableList.call(
+app.post('/approve', async function (req, res) {
+  res.json({
+    data: await instance.approve.sendTransaction(
+      req.body.filename,
+      req.body.requestor,
+      req.body.encrypted_share,
+      {from: req.body.user_id}
+    )
+  });
+})
+
+app.get('/getApprovedListSecrets', async function (req, res) {
+  var results = await instance.getApprovedListSecrets.call(
       {from: req.query.user_id}
     );
+  results = str2array(results, ";")
+  results = results.map((data) => {
+    let procesed_data = str2array(data, ":")
+    return {
+      "filename": procesed_data[0],
+      "secret_share": procesed_data[1],
+    }
+  })
   res.json({
-    data: str2array(results, ";")
+    data: results
   });
 })
 
