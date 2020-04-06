@@ -255,7 +255,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   
   Creates an authorization for a patient file 
   
-  input : (Requester Username, p2pFileName)
+  	input : (requester_userid, p2pFileName)
 	output : p2p file request
 
   **Verification and Testing**
