@@ -308,7 +308,6 @@ contract AccessLog {
             }
         }
 
-        approval_list_result = append(approval_list_result, "}");
         return approval_list_result;
     }
 
