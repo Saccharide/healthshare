@@ -268,7 +268,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   	input : (requester_userid, p2pFileName)
 	output : p2p file request
 
-  **API 12 : Adding Files to a User* 
+  **API 12 : Adding Files to a User** 
 
   Status: done
   
