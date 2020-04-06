@@ -1,9 +1,9 @@
 import requests
 
 """
-test.py is a set of basic API tests to make sure that the various components of 
+test.py is a set of basic API tests to make sure that the various components of
 HealthShare are operating correctly. It is up to the user to ensure that the
-various settings and configuration data is managed properly to run on their system. 
+various settings and configuration data is managed properly to run on their system.
 """
 
 BASE_URL = "http://localhost:3000"
@@ -95,8 +95,12 @@ assert res.json()["data"] == "SECRET_SHARE1"
 # API 11: REQUEST to access a file
 res = requests.post("{}/requestFile".format(BASE_URL), json={
     "filename": "file1",
-    "user_id": ACCOUNT_1
+    "user_id": ACCOUNT_0
 })
 assert res.json()["data"]
+
+# API 4: GET approver list
+res = requests.get("{}/getApprovableList?user_id={}".format(BASE_URL, ACCOUNT_1))
+assert 'file1' in res.json()["data"]
 
 print("All testcases passed")

@@ -15,10 +15,13 @@ app.use(bodyParser.json())
 var instance = null;
 var accounts = null;
 
-function str2array(s) {
-  return s
-    .split("\n")
-    .filter((v, i, self) => self.indexOf(v) === i) ;
+function str2array(string, delimiter) {
+  if (!delimiter) {
+    delimiter = "\n";
+  }
+  return string
+    .split(delimiter)
+    .filter((v, i, self) => v.length && self.indexOf(v) === i) ;
 }
 
 async function main() {
@@ -102,6 +105,15 @@ app.post('/requestFile', async function (req, res) {
       req.body.filename,
       {from: req.body.user_id}
     )
+  });
+})
+
+app.get('/getApprovableList', async function (req, res) {
+  var results = await instance.getApprovableList.call(
+      {from: req.query.user_id}
+    );
+  res.json({
+    data: str2array(results, ";")
   });
 })
 
