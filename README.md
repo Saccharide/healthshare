@@ -186,6 +186,8 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 3: Approval Mappings**
   
+  Status: done
+
   Determines who can approve a patient file 
   
 	input: p2pFileName, approval_user_id, encrypted_secret_share_approver_user_id
@@ -193,6 +195,8 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	
   **API 4 : Checking Pending Approval Requests**
   
+  Status: done
+
   Checks the status of pending approval requests -- goes to Smart Contract 5, queries Smart Contract 3, and checks against Smart Contract 4 to see if a request has *already* been approved
   
 	input: approval_user_id
@@ -200,6 +204,8 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 5 : Getting encrypted_secret_shares_with_approver_public_key**
   
+  Status: done
+
   Gets the encrypted secret shares shared with a requestor. 
   
 	input: p2pFileName, approver_userid
@@ -207,6 +213,8 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	
   **API 6 : Approving Requests**
   
+  Status: done
+
   Approves a request for access of a patient  file. 
   
 	input: p2pFileName, approver_userid, requester_userid, encrypted_secret_shares_encrypted_with_requestor_public_key
@@ -253,6 +261,8 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	
   **API 11 : Request Authorization** 
   
+  Status: done
+
   Creates an authorization for a patient file 
   
   	input : (requester_userid, p2pFileName)
