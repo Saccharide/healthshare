@@ -1,8 +1,8 @@
 import requests
 
 BASE_URL = "http://localhost:3000"
-ACCOUNT_0 = "0x06f47c9896f0e953af35320d61f020e8401002bc"
-ACCOUNT_1 = "0x7818c1e4713b6c45d0fd45cdba76089dbe37152d"
+ACCOUNT_0 = "0x6ad49e1a1243a3b8629e47bd603c8bbc684d1147"
+ACCOUNT_1 = "0xb38a6b63ce227fab60f33b6237bfe7934301741b"
 
 # API 7: SET PUBLIC KEY
 res = requests.post("{}/setPublicKey".format(BASE_URL), json={
@@ -71,5 +71,15 @@ assert res.json()["data"]
 # API 9: GET name and birthday
 res = requests.get("{}/getAddressFromDetails?name={}&birthday={}&user_id={}".format(BASE_URL, "Alice", "02/29/2020", ACCOUNT_0))
 assert res.json()["data"].lower() == ACCOUNT_1.lower()
+
+
+# API 3: SET approver_id
+res = requests.post("{}/setApprover".format(BASE_URL), json={
+    "filename": "file1",
+    "approver_id": ACCOUNT_1,
+    "encrypted_secret_share": "SECRET_SHARE1",
+    "user_id": ACCOUNT_0
+})
+assert res.json()["data"]
 
 print("All testcases passed")

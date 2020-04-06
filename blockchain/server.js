@@ -65,11 +65,24 @@ app.post('/setDetails', async function (req, res) {
   });
 })
 
+
 app.get('/getAddressFromDetails', async function (req, res) {
   res.json({
     data: await instance.getEthereumAdress.call(
       req.query.name,
       req.query.birthday
+    )
+  });
+})
+
+app.post('/setApprover', async function (req, res) {
+  console.log(req.body);
+  res.json({
+    data: await instance.setApprover.sendTransaction(
+      req.body.filename,
+      req.body.approver_id,
+      req.body.encrypted_secret_share,
+      {from: req.body.user_id}
     )
   });
 })
