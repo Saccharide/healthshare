@@ -49,7 +49,7 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 
     $ q [key]
     
-### II. Healthshare's Custom Cryptography Wrapper
+### II. HealthShare's Custom Cryptography Wrapper
 ---
 #### Installation
  **1) Install pip**
@@ -255,12 +255,17 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   
   Creates an authorization for a patient file 
   
-  	input : (Requester Username, p2pFileName)
+  input : (Requester Username, p2pFileName)
 	output : p2p file request
+
+  **Verification and Testing**
+
+  To verify that the APIs are all functioning correctly between the web
+  front-end and multiple backend Block Chains, consider running test/test.py. 
 
 ### III. Access Granting Example 
 ---
-To better illustrate and show the design of Healthshare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
+To better illustrate and show the design of HealthShare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
 #### i. System Setup
 
   **1) File Owner and Immediate Trusted Parties**

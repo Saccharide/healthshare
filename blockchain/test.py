@@ -1,5 +1,11 @@
 import requests
 
+"""
+test.py is a set of basic API tests to make sure that the various components of 
+HealthShare are operating correctly. It is up to the user to ensure that the
+various settings and configuration data is managed properly to run on their system. 
+"""
+
 BASE_URL = "http://localhost:3000"
 ACCOUNT_0 = "0x6ad49e1a1243a3b8629e47bd603c8bbc684d1147"
 ACCOUNT_1 = "0xb38a6b63ce227fab60f33b6237bfe7934301741b"
