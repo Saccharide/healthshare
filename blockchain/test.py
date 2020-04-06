@@ -119,4 +119,11 @@ assert [d
         if d["filename"] == "file1" and d["secret_share"] == "SECRET_SHARE1"
         ]
 
+# API 13: Remove a file
+res = requests.post("{}/removeFile".format(BASE_URL), json={
+    "filename": "file1",
+    "user_id": ACCOUNT_0
+})
+assert res.json()["data"]
+
 print("All testcases passed")

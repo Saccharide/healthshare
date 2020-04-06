@@ -46,7 +46,10 @@ app.post('/setPublicKey', async function (req, res) {
 
 app.post('/addFile', async function (req, res) {
   res.json({
-    data: await instance.addFilename.sendTransaction(req.body.file_name, {from: req.body.user_id})
+    data: await instance.addFilename.sendTransaction(
+      req.body.file_name,
+      {from: req.body.user_id}
+    )
   });
 })
 
@@ -142,6 +145,15 @@ app.get('/getApprovedListSecrets', async function (req, res) {
   })
   res.json({
     data: results
+  });
+})
+
+app.post('/removeFile', async function (req, res) {
+  res.json({
+    data: await instance.removeFile.sendTransaction(
+      req.body.filename,
+      {from: req.body.user_id}
+    )
   });
 })
 
