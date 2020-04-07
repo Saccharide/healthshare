@@ -10,7 +10,7 @@ BASE_URL = "http://localhost:3000"
 ACCOUNT_0 = "0x6ad49e1a1243a3b8629e47bd603c8bbc684d1147"
 ACCOUNT_1 = "0xb38a6b63ce227fab60f33b6237bfe7934301741b"
 
-# API 7: SET PUBLIC KEY
+# API 7: SET public key
 res = requests.post("{}/setPublicKey".format(BASE_URL), json={
     "user_id": ACCOUNT_0,
     "public_key": "MYPUBKEY"
@@ -47,14 +47,14 @@ res = requests.post("{}/setPublicKey".format(BASE_URL), json={
 # }
 assert res.json()["data"]
 
-# API 2: GET PUBLIC KEY
+# API 2: GET public key
 res = requests.get("{}/getPublicKey?user_id={}".format(BASE_URL, ACCOUNT_0))
 # {
 #     "data": "MYPUBKEY"
 # }
 assert res.json()["data"] == "MYPUBKEY"
 
-# API 8: ASSOCIATE A FILE WITH A USER
+# API 8: ASSOCIATE a file with a user
 res = requests.post("{}/addFile".format(BASE_URL), json={
     "user_id": ACCOUNT_0,
     "file_name": "file1"
@@ -62,11 +62,11 @@ res = requests.post("{}/addFile".format(BASE_URL), json={
 # SAMPLE RESPONSE: see API 7
 assert res.json()["data"]
 
-# API 1: GET FILES OF USERS
+# API 1: GET files associated with a user
 res = requests.get("{}/getFiles?user_id={}".format(BASE_URL, ACCOUNT_0))
 assert "file1" in res.json()["data"]
 
-# API 10: SET name and birthday
+# API 10: SET name and birthday to an address
 res = requests.post("{}/setDetails".format(BASE_URL), json={
     "name": "Alice",
     "birthday": "02/29/2020",
@@ -74,12 +74,12 @@ res = requests.post("{}/setDetails".format(BASE_URL), json={
 })
 assert res.json()["data"]
 
-# API 9: GET name and birthday
+# API 9: GET address from name and birthday
 res = requests.get("{}/getAddressFromDetails?name={}&birthday={}&user_id={}".format(BASE_URL, "Alice", "02/29/2020", ACCOUNT_0))
 assert res.json()["data"].lower() == ACCOUNT_1.lower()
 
 
-# API 3: SET approver_id
+# API 3: SET approver_id of file
 res = requests.post("{}/setApprover".format(BASE_URL), json={
     "filename": "file1",
     "approver_id": ACCOUNT_1,
@@ -99,11 +99,11 @@ res = requests.post("{}/requestFile".format(BASE_URL), json={
 })
 assert res.json()["data"]
 
-# API 4: GET approver list
+# API 4: GET approval request list
 res = requests.get("{}/getApprovableList?user_id={}".format(BASE_URL, ACCOUNT_1))
 assert 'file1' in res.json()["data"]
 
-# API 6: APPROVE a file
+# API 6: APPROVE a file access request
 res = requests.post("{}/approve".format(BASE_URL), json={
     "filename": "file1",
     "requestor": ACCOUNT_0,
@@ -112,7 +112,7 @@ res = requests.post("{}/approve".format(BASE_URL), json={
 })
 assert res.json()["data"]
 
-# API 4: GET approver list
+# API 14: GET approved list secrets
 res = requests.get("{}/getApprovedListSecrets?user_id={}".format(BASE_URL, ACCOUNT_0))
 assert [d
         for d in res.json()["data"]
