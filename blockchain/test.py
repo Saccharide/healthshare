@@ -75,7 +75,7 @@ res = requests.post("{}/setDetails".format(BASE_URL), json={
 assert res.json()["data"]
 
 # API 9: GET address from name and birthday
-res = requests.get("{}/getAddressFromDetails?name={}&birthday={}&user_id={}".format(BASE_URL, "Alice", "02/29/2020", ACCOUNT_0))
+res = requests.get("{}/getAddressFromDetails?name={}&birthday={}".format(BASE_URL, "Alice", "02/29/2020"))
 assert res.json()["data"].lower() == ACCOUNT_1.lower()
 
 
