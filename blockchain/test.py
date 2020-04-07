@@ -54,7 +54,7 @@ res = requests.get("{}/getPublicKey?user_id={}".format(BASE_URL, ACCOUNT_0))
 # }
 assert res.json()["data"] == "MYPUBKEY"
 
-# API 8: ASSOCIATE a file with a user
+# API 1: ASSOCIATE a file with a user
 res = requests.post("{}/addFile".format(BASE_URL), json={
     "user_id": ACCOUNT_0,
     "file_name": "file1"
@@ -62,7 +62,7 @@ res = requests.post("{}/addFile".format(BASE_URL), json={
 # SAMPLE RESPONSE: see API 7
 assert res.json()["data"]
 
-# API 1: GET files associated with a user
+# API 8: GET files associated with a user
 res = requests.get("{}/getFiles?user_id={}".format(BASE_URL, ACCOUNT_0))
 assert "file1" in res.json()["data"]
 
