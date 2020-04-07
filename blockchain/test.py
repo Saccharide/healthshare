@@ -7,8 +7,8 @@ various settings and configuration data is managed properly to run on their syst
 """
 
 BASE_URL = "http://localhost:3000"
-ACCOUNT_0 = "0x6ad49e1a1243a3b8629e47bd603c8bbc684d1147"
-ACCOUNT_1 = "0xb38a6b63ce227fab60f33b6237bfe7934301741b"
+ACCOUNT_0 = "0xc69f09325d43e67785bf517211794794e0747c61"
+ACCOUNT_1 = "0x1e734adb5198006d7c9b1644f45c8f5991f64346"
 
 # API 7: SET PUBLIC KEY
 res = requests.post("{}/setPublicKey".format(BASE_URL), json={
@@ -112,7 +112,7 @@ res = requests.post("{}/approve".format(BASE_URL), json={
 })
 assert res.json()["data"]
 
-# API 4: GET approver list
+# API 12: GET approver list
 res = requests.get("{}/getApprovedListSecrets?user_id={}".format(BASE_URL, ACCOUNT_0))
 assert [d
         for d in res.json()["data"]
