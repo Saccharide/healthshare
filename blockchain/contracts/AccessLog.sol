@@ -84,14 +84,14 @@ contract AccessLog {
 * Part 2: File manipulation with user id                                            *
 *                                                                                   *
 ************************************************************************************/
-    // API 12: Adding a file to the list that is corresponding to the user
+    // API 1/12: Adding a file to the list that is corresponding to the user
     function addFilename(string memory fileName) public {
         hasFile[msg.sender] = true;
         string memory temp = append("\n", fileName);
         files[msg.sender] = append(files[msg.sender], temp);
     }
 
-    // API 1 & 8
+    // API 8
     // Getting a "list" of file names: a list string that is separated with new line character
     function getFiles(address _address) public view returns (string memory) {
         // Caller must have a file asscoiated with it

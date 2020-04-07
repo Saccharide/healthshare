@@ -170,10 +170,10 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   
   Status: done
   
-  Creates and links a patient file with <user, user birthday>
+  Creates and links a patient file with user's id (an address)
 
-	input: whatever authentication information you need <user, user birthdate>
-	output: List of p2pFileNames
+	input: user_address, file_name
+	output: <none>
 
   **API 2 : Fetching a User's Public Key**
   
@@ -190,7 +190,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   Determines who can approve a patient file 
   
-	input: p2pFileName, approval_user_id, encrypted_secret_share_approver_user_id
+	input: p2pFileName, user_id, approval_user_id, encrypted_secret_share_approver_user_id
 	output: (updates smart contract 2 and 5) status message
 	
   **API 4 : Checking Pending Approval Requests**
@@ -236,8 +236,8 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   
   Gets a list of filenames associated with the user. 
   
-	input: Username, Birthday or Ethereum address
-	output: A list of p2pFilenames in the form of one single string
+	input: Ethereum address
+	output: A list of p2pFilenames
 
 
   **API 9 : Getting Ethereum Addresses**
@@ -268,13 +268,13 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   	input : (requester_userid, p2pFileName)
 	output : p2p file request
 
-  **API 12 : Adding Files to a User** 
+  **API 12 : Adding Files to a User (OVERLAPPING WITH 1)** 
 
   Status: done
   
-  Adds a file to the associated user i.e. patient in Ethereum/HealthShare. 
+  Add a file to the associated user i.e. patient in Ethereum/HealthShare. 
   
-	input: Ethereum address
+	input: Ethereum address, file_name
 	output: n/a 
 
   **API 13 : Deleting a File from a User** 
@@ -293,7 +293,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   Gets a list of files for a user which were approved by another. 
   
 	input: Ethereum address
-	output: A list of p2pFilenames with encrypted secret share in the form of one single string
+	output: A list of p2pFilenames with encrypted secret share
 
   **Verification and Testing**
 
