@@ -237,7 +237,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   Gets a list of filenames associated with the user. 
   
 	input: Ethereum address
-	output: A list of p2pFilenames in the form of one single string
+	output: A list of p2pFilenames
 
 
   **API 9 : Getting Ethereum Addresses**
@@ -268,13 +268,13 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   	input : (requester_userid, p2pFileName)
 	output : p2p file request
 
-  **API 12 : Adding Files to a User** 
+  **API 12 : Adding Files to a User (OVERLAPPING WITH 1)** 
 
   Status: done
   
-  Adds a file to the associated user i.e. patient in Ethereum/HealthShare. 
+  Add a file to the associated user i.e. patient in Ethereum/HealthShare. 
   
-	input: Ethereum address
+	input: Ethereum address, file_name
 	output: n/a 
 
   **API 13 : Deleting a File from a User** 
@@ -293,7 +293,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   Gets a list of files for a user which were approved by another. 
   
 	input: Ethereum address
-	output: A list of p2pFilenames with encrypted secret share in the form of one single string
+	output: A list of p2pFilenames with encrypted secret share
 
   **Verification and Testing**
 
