@@ -1,18 +1,32 @@
-# HealthShare
+# HealthShare <a name="intro"></a>
 HealthShare is a POC for securely sharing patient-provided information among patients, providers, and various healthcare organizations. Although standards like Fast Healthcare Interoperability Resources (FHIR) exist for uniformly encoding patient data, there isn't a uniform or consistent platform to data from a consumer/patient standpoint. HealthShare aims to fill in that gap using a structured P2P, encrypted file sharing system backed by Blockchain technology to guarantee data authenticity and integrity. Built using OpenDHT, Ethereum, and Truffle, HealthShare is the result of Quang Huynh, Tony Tang, Elgin Lee Wei Sheng, and Harrison Banh from the Georgia Institute of Technology as their class project for Professor Ling Liu's CS 6675 Advanced Internet Computing class. 
 
 Table of contents
 =================
 
-<!--ts-->
-   * [Setup and Usage Instructions](#setup-and-usage-instructions)
-<!--te-->
+<!--TOC-->
+- [What is HealthShare?](#intro)
+- [Setup and Usage Instructions](#setup-and-usage-instructions)
+  * [I. OpenDHT](#opendht)
+    + [i. Installation](#opendht_installation)
+    + [ii. Usage](#opendht_usage)
+  * [II. Custom Crypto Wrapper](#healthshare_crypto_wrapper)
+    + [i. Installation](#healthshare_crypto_wrapper_installation)
+    + [ii. Usage](#healthshare_crypto_wrapper_usage)
+  * [II. Truffle](#truffle)
+    + [i. Installation](#truffle_installation)
+    + [ii. Usage](#truffle_usage)
+- [Design and Example Scenario](#design-and-example-scenario)
+  * [I. Smart Contracts](#smart_contracts)
+  * [II. APIs](#apis)
+  * [III. Use Case Example](#use_case_example)
+<!--TOC-->
 
 
-## Setup and Usage Instructions
-### I. OpenDHT
+## Setup and Usage Instructions 
+### I. OpenDHT <a name="opendht"></a>
 ---
-#### Installation
+#### Installation <a name="opendht_installation"></a>
    **1) Install OpenDHT dependencies**
   
     sudo apt install libncurses5-dev libreadline-dev nettle-dev libgnutls28-dev libargon2-0-dev libmsgpack-dev librest
@@ -40,7 +54,7 @@ Table of contents
     make -j4
     sudo make install
 
-#### Usage
+#### Usage <a name="opendht_usage"></a>
   **Running a node**
 
     dhtnode
@@ -57,9 +71,9 @@ Table of contents
 
     $ q [key]
     
-### II. HealthShare's Custom Cryptography Wrapper
+### II. HealthShare's Custom Cryptography Wrapper <a name="healthshare_crypto_wrapper"></a>
 ---
-#### Installation
+#### Installation <a name="healthshare_crypto_wrapper_installation"></a>
  **1) Install pip**
  
  	sudo apt-get install python python-pip
@@ -68,12 +82,12 @@ Table of contents
  
  	sudo pip install secretsharing
 	
-#### Usage 
+#### Usage <a name="healthshare_crypto_wrapper_usage"></a>
 	python2 main.py
 	
-### III. Truffle
+### III. Truffle <a name="truffle"></a>
 ---
-#### Installation
+#### Installation <a name="truffle_installation"></a>
  **1) Install node and npm**
  	
 	sudo apt-get install nodejs 
@@ -90,7 +104,7 @@ Table of contents
  
  	sudo npm install -g truffle@5.1.13
 
-#### Usage
+#### Usage <a name="truffle_usage"></a>
   **1) Switch into the "blockchain" directory of this project**
   	
 	cd blockchain
@@ -126,7 +140,7 @@ Refer to blockchain/test.py for more on sample usage, and https://github.com/Sac
 ## Design and Example Scenario
 HealthShare uses a series of Smart Contracts and API's to communicate between our file sharing P2P network and system log Block chains. 
 
-### I. Smart Contracts
+### I. Smart Contracts <a name="smart_contracts"></a>
 ---
   **Smart Contract 1 (HealthShare User) : <user,birthdate> -> p2pFilename**
   
@@ -172,7 +186,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	Harrison -> Harrison_Public_Key
 	Quang -> Quang_Public_Key
 
-### II. APIs Needed
+### II. APIs Needed <a name="apis"></a>
 ---
   **API 1 : Associating User Information**
   
@@ -308,10 +322,10 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
   To verify that the APIs are all functioning correctly between the web
   front-end and multiple backend Block Chains, consider running test/test.py. 
 
-### III. Access Granting Example 
+### III. Access Granting Example <a name="use_case_example"></a>
 ---
 To better illustrate and show the design of HealthShare, let us examine the following scenario. Say that we have our patient, Tony, who has authorized his friends Elgin and Harrison as secret share holders. Our system will represent Tony as the following...
-#### i. System Setup
+#### i. System Setup 
 
   **1) File Owner and Immediate Trusted Parties**
   
