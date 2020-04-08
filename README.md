@@ -1,27 +1,23 @@
 # HealthShare <a name="intro"></a>
+---
 HealthShare is a POC for securely sharing patient-provided information among patients, providers, and various healthcare organizations. Although standards like Fast Healthcare Interoperability Resources (FHIR) exist for uniformly encoding patient data, there isn't a uniform or consistent platform to data from a consumer/patient standpoint. HealthShare aims to fill in that gap using a structured P2P, encrypted file sharing system backed by Blockchain technology to guarantee data authenticity and integrity. Built using OpenDHT, Ethereum, and Truffle, HealthShare is the result of Quang Huynh, Tony Tang, Elgin Lee Wei Sheng, and Harrison Banh from the Georgia Institute of Technology as their class project for Professor Ling Liu's CS 6675 Advanced Internet Computing class. 
 
-Table of contents
-=================
-
-<!--TOC-->
+## Table of contents
 - [What is HealthShare?](#intro)
 - [Setup and Usage Instructions](#setup-and-usage-instructions)
-  * [I. OpenDHT](#opendht)
-    + [i. Installation](#opendht_installation)
-    + [ii. Usage](#opendht_usage)
-  * [II. Custom Crypto Wrapper](#healthshare_crypto_wrapper)
-    + [i. Installation](#healthshare_crypto_wrapper_installation)
-    + [ii. Usage](#healthshare_crypto_wrapper_usage)
-  * [II. Truffle](#truffle)
-    + [i. Installation](#truffle_installation)
-    + [ii. Usage](#truffle_usage)
+  1. [OpenDHT](#opendht)
+     1. [Installation](#opendht_installation)
+     1. [Usage](#opendht_usage)
+  1. [Custom Crypto Wrapper](#healthshare_crypto_wrapper)
+     1. [Installation](#healthshare_crypto_wrapper_installation)
+     1. [Usage](#healthshare_crypto_wrapper_usage)
+  1. [Truffle](#truffle)
+     1. [Installation](#truffle_installation)
+     1. [Usage](#truffle_usage)
 - [Design and Example Scenario](#design-and-example-scenario)
-  * [I. Smart Contracts](#smart_contracts)
-  * [II. APIs](#apis)
-  * [III. Use Case Example](#use_case_example)
-<!--TOC-->
-
+  1. [Smart Contracts](#smart_contracts)
+  1. [APIs](#apis)
+  1. [Use Case Example](#use_case_example)
 
 ## Setup and Usage Instructions 
 ### I. OpenDHT <a name="opendht"></a>
