@@ -5,7 +5,7 @@ HealthShare is a POC for securely sharing patient-provided information among pat
 ## Table of contents
 - [What is HealthShare?](#intro)
 - [Setup and Usage Instructions](#setup-and-usage-instructions)
-  1. [I. OpenDHT](#opendht)
+  1. [OpenDHT](#opendht)
      1. [Installation](#opendht_installation)
      1. [Usage](#opendht_usage)
   1. [Custom Crypto Wrapper](#healthshare_crypto_wrapper)
