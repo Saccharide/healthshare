@@ -1,6 +1,14 @@
 # HealthShare
 HealthShare is a POC for securely sharing patient-provided information among patients, providers, and various healthcare organizations. Although standards like Fast Healthcare Interoperability Resources (FHIR) exist for uniformly encoding patient data, there isn't a uniform or consistent platform to data from a consumer/patient standpoint. HealthShare aims to fill in that gap using a structured P2P, encrypted file sharing system backed by Blockchain technology to guarantee data authenticity and integrity. Built using OpenDHT, Ethereum, and Truffle, HealthShare is the result of Quang Huynh, Tony Tang, Elgin Lee Wei Sheng, and Harrison Banh from the Georgia Institute of Technology as their class project for Professor Ling Liu's CS 6675 Advanced Internet Computing class. 
 
+Table of contents
+=================
+
+<!--ts-->
+   * [Setup and Usage Instructions](#setup-and-usage-instructions)
+<!--te-->
+
+
 ## Setup and Usage Instructions
 ### I. OpenDHT
 ---
