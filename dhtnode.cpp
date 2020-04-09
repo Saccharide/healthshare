@@ -342,11 +342,18 @@ void cmd_loop(std::shared_ptr<DhtRunner>& node, dht_params& params
         if (op == "g") {
             std::string rem;
             std::getline(iss, rem);
+
+            std::cout << "Opening file:" << idstr << std::endl;
+            std::ofstream outputFile;
+            outputFile.open(idstr);
+
             node->get(id, [start](const std::vector<std::shared_ptr<Value>>& values) {
                 auto now = std::chrono::high_resolution_clock::now();
                 std::cout << "Get: found " << values.size() << " value(s) after " << print_duration(now-start) << std::endl;
-                for (const auto& value : values)
+                for (const auto& value : values) {
                     std::cout << "\t" << *value << std::endl;
+                    outputFile << "\t" << *value << std::endl;
+                }
                 return true;
             }, [start](bool ok) {
                 auto end = std::chrono::high_resolution_clock::now();

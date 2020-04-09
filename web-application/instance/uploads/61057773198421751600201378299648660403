@@ -1,0 +1,37 @@
+### Overview
+  - You are going to build a store (you can think of Amazon Store), which receives requests from different users, querying the prices offered by the different registered vendors.
+  - Your store will be provided with a file containing addresses of vendor servers in the form \<ip address:port\>. On each product query, your server is supposed to request bids for the queried product from all of these vendor servers.
+  - Once your store has responses from all the vendors, it is supposed to collate the (bid, vendor_id) from the vendors and send it back to the requesting client.
+  
+### Environment Setup
+
+git clone --recursive https://github.com/grpc/grpc
+cd grpc/third_party/protobuf
+sudo apt-get install autoconf automake libtool curl make g++ unzip
+./autogen.sh
+./configure
+sudo make
+sudo make install
+sudo ldconfig
+cd ../../
+make
+sudo make install
+
+### Threadpool Implementation
+
+The threadpool uses a few simple data structures to achieve its goal. The core implementation follows methodology from https://www.youtube.com/watch?v=yRCfzyLTZP0 and https://www.youtube.com/watch?v=eWTGtp3HXiw
+
+1) A queue for tasks waiting to be serviced.
+2) A vector which tracks the threads usable by the process
+3) A boolean to signal threads when parent is terminating
+4) Mutex for all the above shared variables
+
+### Compiling Project Files
+cd src
+make
+cd ../test
+make
+
+### Important Notes
+The store searches for the vendorfile in ../../src/vendor_addresses.txt as it assumes that it is running from build/bin
+If this is not the case, then change the variable to point to the proper vendor_addresses.txt file before running
