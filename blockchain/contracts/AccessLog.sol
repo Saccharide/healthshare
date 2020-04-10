@@ -302,18 +302,24 @@ contract AccessLog {
                 // Check if this file is on approved board
 
                 Approval[] memory approved_list = approval_board_dict[msg.sender];
+                bool approved_before = false;
                 for(uint k = 0; k <= approved_list.length; k++ ){
-                    if (approved_list[k].approver != msg.sender) {
-                        approval_list = append(approval_list, _filename);
-                        approval_list = append(approval_list, '+');
-                        approval_list = append(approval_list, toString(request_board[index].requester));
-                        approval_list = append(approval_list, '+');
-                        approval_list = append(approval_list,uint2str(request_board[index].timestamp));
-                        approval_list = append(approval_list, ";");
+                    if (approved_list[k].approver == msg.sender) {
+                        string memory left = approved_list[k].filename;
+                        if (keccak256(abi.encodePacked(left)) == keccak256(abi.encodePacked(_filename))) {
+                           approved_before = true;
+                           break;
+                        }
                     }
                 }
- 
-
+                if (!approved_before) {
+                    approval_list = append(approval_list, _filename);
+                    approval_list = append(approval_list, '+');
+                    approval_list = append(approval_list, toString(request_board[index].requester));
+                    approval_list = append(approval_list, '+');
+                    approval_list = append(approval_list,uint2str(request_board[index].timestamp));
+                    approval_list = append(approval_list, ";");
+                 }
            }
         }
 
