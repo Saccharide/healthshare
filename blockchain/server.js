@@ -24,6 +24,16 @@ function str2array(string, delimiter) {
     .filter((v, i, self) => v.length && self.indexOf(v) === i) ;
 }
 
+function timestamp2str(ts) {
+  var date = new Date(ts * 1000);
+  return (date.getMonth()+1) + "/"
+    + date.getDate() + "/"
+    + date.getFullYear() + " "
+    + date.getHours() + ":"
+    + date.getMinutes() + ":"
+    + date.getSeconds();
+}
+
 async function main() {
   accounts = await web3.eth.getAccounts();
   AccessLog.setProvider(provider);
@@ -34,7 +44,7 @@ async function main() {
 
 app.get('/getPublicKey', async function (req, res) {
   res.json({
-    data: await instance.getPublicKey.call()
+    data: await instance.getPublicKey.call({from: req.query.user_id})
   });
 })
 
@@ -106,8 +116,19 @@ app.get('/getApprovableList', async function (req, res) {
   var results = await instance.getApprovableList.call(
       {from: req.query.user_id}
     );
+
+  results = str2array(results, ";")
+  results = results.map((data) => {
+    let procesed_data = str2array(data, "+")
+    return {
+      "filename": procesed_data[0].replace(/\0/g, ''),
+      "requestor_id": procesed_data[1].replace(/\0/g, ''),
+      "datetime": timestamp2str(parseInt(procesed_data[2].replace(/\0/g, '')))
+    }
+  })
+
   res.json({
-    data: str2array(results, ";")
+    data: results
   });
 })
 
@@ -154,6 +175,17 @@ app.post('/removeFile', async function (req, res) {
       req.body.filename,
       {from: req.body.user_id}
     )
+  });
+})
+
+
+app.post('/createAccount', async function (req, res) {
+  let acc = await web3.eth.accounts.wallet.create(1);
+  res.json({
+    data: {
+      "address": acc[0].address,
+      "privateKey": acc[0].privateKey
+    }
   });
 })
 

@@ -101,7 +101,7 @@ assert res.json()["data"]
 
 # API 4: GET approval request list
 res = requests.get("{}/getApprovableList?user_id={}".format(BASE_URL, ACCOUNT_1))
-assert 'file1' in res.json()["data"]
+assert 'file1' in [a["filename"] for a in res.json()["data"]]
 
 # API 6: APPROVE a file access request
 res = requests.post("{}/approve".format(BASE_URL), json={
