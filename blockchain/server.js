@@ -10,6 +10,8 @@ var AccessLog = contract(require("./build/contracts/AccessLog.json"))
 const express = require('express')
 var bodyParser = require('body-parser')
 
+const asyncHandler = require('express-async-handler')
+
 const app = express()
 app.use(bodyParser.json())
 var instance = null;
@@ -42,35 +44,35 @@ async function main() {
   app.listen(3000)
 }
 
-app.get('/getPublicKey', async function (req, res) {
+app.get('/getPublicKey', asyncHandler(async function (req, res) {
   res.json({
     data: await instance.getPublicKey.call({from: req.query.user_id})
   });
-})
+}))
 
-app.post('/setPublicKey', async function (req, res) {
+app.post('/setPublicKey', asyncHandler(async function (req, res) {
   res.json({
     data: await instance.setPublicKey.sendTransaction(req.body.public_key, {from: req.body.user_id})
   });
-})
+}))
 
-app.post('/addFile', async function (req, res) {
+app.post('/addFile', asyncHandler(async function (req, res) {
   res.json({
     data: await instance.addFilename.sendTransaction(
       req.body.file_name,
       {from: req.body.user_id}
     )
   });
-})
+}))
 
-app.get('/getFiles', async function (req, res) {
+app.get('/getFiles', asyncHandler(async function (req, res) {
   var address = (req.query.user_id);
   res.json({
     data: str2array(await instance.getFiles.call(address))
   });
-})
+}))
 
-app.post('/setDetails', async function (req, res) {
+app.post('/setDetails', asyncHandler(async function (req, res) {
   var address = req.body.user_id;
   res.json({
     data: await instance.setEthereumAdress.sendTransaction(
@@ -79,19 +81,19 @@ app.post('/setDetails', async function (req, res) {
       {from: address}
     )
   });
-})
+}))
 
 
-app.get('/getAddressFromDetails', async function (req, res) {
+app.get('/getAddressFromDetails', asyncHandler(async function (req, res) {
   res.json({
     data: await instance.getEthereumAdress.call(
       req.query.name,
       req.query.birthday
     )
   });
-})
+}))
 
-app.post('/setApprover', async function (req, res) {
+app.post('/setApprover', asyncHandler(async function (req, res) {
   res.json({
     data: await instance.setApprover.sendTransaction(
       req.body.filename,
@@ -100,19 +102,19 @@ app.post('/setApprover', async function (req, res) {
       {from: req.body.user_id}
     )
   });
-})
+}))
 
 
-app.get('/getApproverSecret', async function (req, res) {
+app.get('/getApproverSecret', asyncHandler(async function (req, res) {
   res.json({
     data: await instance.getApproverSecret.call(
       req.query.filename,
       req.query.approver_id
     )
   });
-})
+}))
 
-app.get('/getApprovableList', async function (req, res) {
+app.get('/getApprovableList', asyncHandler(async function (req, res) {
   var results = await instance.getApprovableList.call(
       {from: req.query.user_id}
     );
@@ -130,18 +132,18 @@ app.get('/getApprovableList', async function (req, res) {
   res.json({
     data: results
   });
-})
+}))
 
-app.post('/requestFile', async function (req, res) {
+app.post('/requestFile', asyncHandler(async function (req, res) {
   res.json({
     data: await instance.requestFile.sendTransaction(
       req.body.filename,
       {from: req.body.user_id}
     )
   });
-})
+}))
 
-app.post('/approve', async function (req, res) {
+app.post('/approve', asyncHandler(async function (req, res) {
   res.json({
     data: await instance.approve.sendTransaction(
       req.body.filename,
@@ -150,9 +152,9 @@ app.post('/approve', async function (req, res) {
       {from: req.body.user_id}
     )
   });
-})
+}))
 
-app.get('/getApprovedListSecrets', async function (req, res) {
+app.get('/getApprovedListSecrets', asyncHandler(async function (req, res) {
   var results = await instance.getApprovedListSecrets.call(
       {from: req.query.user_id}
     );
@@ -167,19 +169,19 @@ app.get('/getApprovedListSecrets', async function (req, res) {
   res.json({
     data: results
   });
-})
+}))
 
-app.post('/removeFile', async function (req, res) {
+app.post('/removeFile', asyncHandler(async function (req, res) {
   res.json({
     data: await instance.removeFile.sendTransaction(
       req.body.filename,
       {from: req.body.user_id}
     )
   });
-})
+}))
 
 
-app.post('/createAccount', async function (req, res) {
+app.post('/createAccount', asyncHandler(async function (req, res) {
   let acc = await web3.eth.accounts.wallet.create(1);
   res.json({
     data: {
@@ -187,7 +189,12 @@ app.post('/createAccount', async function (req, res) {
       "privateKey": acc[0].privateKey
     }
   });
-})
+}))
+
+app.use(function(err, req, res, next) {
+  return res.status(500).json({
+  });
+});
 
 main()
 
