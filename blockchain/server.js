@@ -192,7 +192,9 @@ app.post('/createAccount', asyncHandler(async function (req, res) {
 }))
 
 app.use(function(err, req, res, next) {
+  console.log(err);
   return res.status(500).json({
+    "error": err
   });
 });
 
