@@ -302,7 +302,7 @@ contract AccessLog {
                 // Check if this file is on approved board
 
                 Approval[] memory approved_list = approval_board_dict[msg.sender];
-                for(uint k = 0; k < approved_list.length; k++ ){
+                for(uint k = 0; k <= approved_list.length; k++ ){
                     if (approved_list[k].approver != msg.sender) {
                         approval_list = append(approval_list, _filename);
                         approval_list = append(approval_list, '+');
