@@ -134,7 +134,7 @@ res = requests.post("{}/approve".format(BASE_URL), json={
 assert res.json()["data"]
 
 # API 14: GET approved list secrets
-res = requests.get("{}/getApprovedListSecrets?user_id={}".format(BASE_URL, ACCOUNT_0))
+res = requests.get("{}/getApprovedListSecrets?user_id={}".format(BASE_URL, ACCOUNT_2))
 assert [d
         for d in res.json()["data"]
         if d["filename"] == FILENAME and d["secret_share"] == "SECRET_SHARE1"
