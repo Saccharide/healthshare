@@ -22,6 +22,8 @@ Private Keys:
 (7) 2e5b11cf0841759913009fdf462bfc4ca8ed63412387d5f4cb66bf63e014ca61
 (8) 552301299342183b7b57bb35ad2a0f11188be89ab762fb0ffc10b903048a8768
 (9) f6eb1050cb3fec1795a1e6d450b53f929f8bd068cdfaeed7e052ebfb22c4a6e1
+
+
 '''
 
 from flask import Flask, url_for, render_template, request, redirect, session
@@ -42,7 +44,7 @@ db = SQLAlchemy(app)
 ACCOUNT_0 = "0x06f47c9896f0e953af35320d61f020e8401002bc"
 ACCOUNT_1 = ""
 BASE_URL = "http://localhost:3000"
-CONNECTION_COMMAND = 'b localhost:34240'
+CONNECTION_COMMAND = 'b localhost:49587'
 
 def Upload_To_P2P(KEY, FILEPATH):
     child = pexpect.spawn('./dhtnode')
@@ -131,15 +133,17 @@ def Get_Approver_Secret_Share(SERVER_URL, FILENAME, APPROVER_ID):
     return res.json()
 
 # API 6: APPROVE REQUEST
-def Approve_Request(SERVER_URL, FILENAME, REQUESTOR_ID, ENCRYPTED_SECRET_SHARE, OWNER_ID):
+def Approve_Request(SERVER_URL, FILENAME, REQUESTOR_ID, ENCRYPTED_SECRET_SHARE, APPROVER_ID):
     print("{}/approve".format(SERVER_URL))
-    print("filename:" + str(FILENAME) + " requestor:" + str(REQUESTOR_ID) + ", encrypted_share: " + str(ENCRYPTED_SECRET_SHARE) + ", user_id: " + str(OWNER_ID))
+    print("filename:" + str(FILENAME) + " requestor:" + str(REQUESTOR_ID) + ", encrypted_share: " + str(ENCRYPTED_SECRET_SHARE) + ", user_id: " + str(APPROVER_ID))
     res = requests.post("{}/approve".format(SERVER_URL), json={
-        "filename": FILENAME,
-        "requestor": REQUESTOR_ID,
-        "encrypted_share": ENCRYPTED_SECRET_SHARE,
-        "user_id": OWNER_ID
+        "filename": str(FILENAME),
+        "requestor": str(REQUESTOR_ID),
+        "encrypted_share": str(ENCRYPTED_SECRET_SHARE),
+        "user_id": str(APPROVER_ID)
     })
+
+    print(res.status_code)
     return res.json()
 
 # API 7: ASSOCIATE PUBLIC KEY WITH USER
@@ -215,10 +219,10 @@ def approve():
     for file in file_list["data"]:
         print(file)
         if file != '':
-            item = {'File Name': file, 'Actions': {'icon': 'fa fa-plus', 'text': 'Approve', 'link': 'approve_file?filename=' + file}}
+            item = {'File Name': file['filename'], 'Requestor': file['requestor_id'], 'Time': file['datetime'], 'Actions': {'icon': 'fa fa-plus', 'text': 'Approve', 'link': 'approve_file?filename=' + file['filename']+'&requestor=' + file['requestor_id']}}
             items_list.append(item)
             
-    return render_template('approve.html', data=session['username'], columns=['File Name', 'Actions'], items=items_list)
+    return render_template('approve.html', data=session['username'], columns=['File Name','Requestor', 'Time', 'Actions'], items=items_list)
 
 
 @app.route('/view/authorize', methods=['GET', 'POST'])
@@ -232,12 +236,16 @@ def approve_file():
     filename = request.args.get('filename')
     print("Approving File: " + filename)
 
+    requestor = request.args.get('requestor')
+    print("Requestor: " + requestor)
+
     # get the approver secret share
-    secret_share = eval(Get_Approver_Secret_Share(BASE_URL, filename, ACCOUNT_0)['data'])[1]
+    secret_share_raw = Get_Approver_Secret_Share(BASE_URL, filename, ACCOUNT_0)['data']
+    secret_share = eval(secret_share_raw)[1]
 
     print(secret_share)
 
-    Approve_Request(BASE_URL, filename, ACCOUNT_0, secret_share, ACCOUNT_1)
+    Approve_Request(BASE_URL, filename, requestor, secret_share, ACCOUNT_0)
 
     return render_template("success.html", name = filename)  
 

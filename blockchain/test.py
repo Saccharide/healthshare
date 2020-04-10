@@ -1,4 +1,6 @@
 import requests
+import random
+import time
 
 """
 test.py is a set of basic API tests to make sure that the various components of
@@ -9,6 +11,9 @@ various settings and configuration data is managed properly to run on their syst
 BASE_URL = "http://localhost:3000"
 ACCOUNT_0 = "0x06f47c9896f0e953af35320d61f020e8401002bc"
 ACCOUNT_1 = "0x7818c1e4713b6c45d0fd45cdba76089dbe37152d"
+ACCOUNT_2 = "0xc2d2f7152a8ed700d1cd08cb5cfbe4c7a1d9ce03"
+
+FILENAME = str("file"+str(int(time.time())))
 
 # API 7: SET public key
 res = requests.post("{}/setPublicKey".format(BASE_URL), json={
@@ -57,14 +62,14 @@ assert res.json()["data"] == "MYPUBKEY"
 # API 1: ASSOCIATE a file with a user
 res = requests.post("{}/addFile".format(BASE_URL), json={
     "user_id": ACCOUNT_0,
-    "file_name": "file1"
+    "file_name": FILENAME
 })
 # SAMPLE RESPONSE: see API 7
 assert res.json()["data"]
 
 # API 8: GET files associated with a user
 res = requests.get("{}/getFiles?user_id={}".format(BASE_URL, ACCOUNT_0))
-assert "file1" in res.json()["data"]
+assert FILENAME in res.json()["data"]
 
 # API 10: SET name and birthday to an address
 res = requests.post("{}/setDetails".format(BASE_URL), json={
@@ -81,7 +86,7 @@ assert res.json()["data"].lower() == ACCOUNT_1.lower()
 
 # API 3: SET approver_id of file
 res = requests.post("{}/setApprover".format(BASE_URL), json={
-    "filename": "file1",
+    "filename": FILENAME,
     "approver_id": ACCOUNT_1,
     "encrypted_secret_share": "ENCRYPTED_SECRET_SHARE1",
     "user_id": ACCOUNT_0
@@ -89,39 +94,40 @@ res = requests.post("{}/setApprover".format(BASE_URL), json={
 assert res.json()["data"]
 
 # API 5: GET approver secret
-res = requests.get("{}/getApproverSecret?filename={}&approver_id={}".format(BASE_URL, "file1", ACCOUNT_1))
+res = requests.get("{}/getApproverSecret?filename={}&approver_id={}".format(BASE_URL, FILENAME, ACCOUNT_1))
 assert res.json()["data"] == "ENCRYPTED_SECRET_SHARE1"
 
 # API 11: REQUEST to access a file
 res = requests.post("{}/requestFile".format(BASE_URL), json={
-    "filename": "file1",
-    "user_id": ACCOUNT_0
+    "filename": FILENAME,
+    "user_id": ACCOUNT_2
 })
 assert res.json()["data"]
 
 # API 4: GET approval request list
 res = requests.get("{}/getApprovableList?user_id={}".format(BASE_URL, ACCOUNT_1))
+print("{}/getApprovableList?user_id={}".format(BASE_URL, ACCOUNT_1))
 # SAMPLE RESPONSE: {
 #   'data': [{
-#     'filename': 'file1',
+#     'filename': FILENAME,
 #     'requestor_id': '0x00428785e8787c9b156e8c914cfa4be54d1cccd6',
 #     'datetime': '4/9/2020 21:34:21'
 #   }, {
-#     'filename': 'file1',
+#     'filename': FILENAME,
 #     'requestor_id': '0x00428785e8787c9b156e8c914cfa4be54d1cccd6',
 #     'datetime': '4/9/2020 21:34:35'
 #   }, {
-#     'filename': 'file1',
+#     'filename': FILENAME,
 #     'requestor_id': '0x00428785e8787c9b156e8c914cfa4be54d1cccd6',
 #     'datetime': '4/9/2020 21:36:2'
 #   }]
 # }
-assert 'file1' in [a["filename"] for a in res.json()["data"]]
+assert FILENAME in [a["filename"] for a in res.json()["data"]]
 
 # API 6: APPROVE a file access request
 res = requests.post("{}/approve".format(BASE_URL), json={
-    "filename": "file1",
-    "requestor": ACCOUNT_0,
+    "filename": FILENAME,
+    "requestor": ACCOUNT_2,
     "encrypted_share": "SECRET_SHARE1",
     "user_id": ACCOUNT_1
 })
@@ -131,12 +137,12 @@ assert res.json()["data"]
 res = requests.get("{}/getApprovedListSecrets?user_id={}".format(BASE_URL, ACCOUNT_0))
 assert [d
         for d in res.json()["data"]
-        if d["filename"] == "file1" and d["secret_share"] == "SECRET_SHARE1"
+        if d["filename"] == FILENAME and d["secret_share"] == "SECRET_SHARE1"
         ]
 
 # API 13: Remove a file
 res = requests.post("{}/removeFile".format(BASE_URL), json={
-    "filename": "file1",
+    "filename": FILENAME,
     "user_id": ACCOUNT_0
 })
 assert res.json()["data"]
@@ -199,7 +205,7 @@ print(res.json()['data'])
 
 
 print("Function 2: Uploading a File")
-FILENAME = 'file1'
+FILENAME = FILENAME
 # Upload File
 res = requests.post("{}/addFile".format(BASE_URL), json={
     "user_id": ACCOUNT_0,

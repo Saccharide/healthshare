@@ -198,9 +198,9 @@
 				    <tr>
 				    {%- for column in columns %}
 				        {% if row[column]['icon'] %}
-				            <td><a href="{{ row[column]['link'] }}">{{ row[column]['text'] }}</a></td>
+				            <td style="word-wrap: break-word;"><a href="{{ row[column]['link'] }}">{{ row[column]['text'] }}</a></td>
 				        {% else %}
-				            <td>{{ row[column] }}</td>
+				            <td style="word-wrap: break-word;">{{ row[column] }}</td>
 				        {% endif %}
 				    {%- endfor %}
 				    </tr>

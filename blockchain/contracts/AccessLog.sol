@@ -334,7 +334,7 @@ contract AccessLog {
                     if (approval_board[k].approver == msg.sender) {
                         string memory left = approval_board[k].filename;
                         if (keccak256(abi.encodePacked(left)) == keccak256(abi.encodePacked(_filename))) {
-                           approved_before = true;
+                            approved_before = true;
                         }
                     }
                 }
