@@ -87,7 +87,7 @@ contract AccessLog {
     // API 1/12: Adding a file to the list that is corresponding to the user
     function addFilename(string memory fileName) public {
         hasFile[msg.sender] = true;
-        string memory temp = append("\n", fileName);
+        string memory temp = append(fileName,";");
         files[msg.sender] = append(files[msg.sender], temp);
     }
 
@@ -101,11 +101,10 @@ contract AccessLog {
 
     // API 13: Remove a file from that user
     function removeFile(string memory filename) public view {
-
         // Checks if this user contain the specified filename
         assert(contains(filename, files[msg.sender]));
-
         // Find the index of the substring, remove the substring
+        filename = append(filename,";");
         remove(filename, files[msg.sender]);
 
     }
