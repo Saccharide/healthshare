@@ -68,7 +68,7 @@ app.post('/addFile', asyncHandler(async function (req, res) {
 app.get('/getFiles', asyncHandler(async function (req, res) {
   var address = (req.query.user_id);
   res.json({
-    data: str2array(await instance.getFiles.call(address))
+    data: str2array(await instance.getFiles.call(address), ";")
   });
 }))
 
