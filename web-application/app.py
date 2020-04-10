@@ -43,8 +43,9 @@ db = SQLAlchemy(app)
 
 # These variables are for testing, will be dynamic in the future when more APIs available
 ACCOUNT_0 = "0x06f47c9896f0e953af35320d61f020e8401002bc"
+ACCOUNT_1 = ""
 BASE_URL = "http://localhost:3000"
-CONNECTION_COMMAND = 'b localhost:44231'
+CONNECTION_COMMAND = 'b localhost:52230'
 
 def Upload_To_P2P(KEY, FILEPATH):
     child = pexpect.spawn('./dhtnode')
@@ -99,6 +100,7 @@ class User(db.Model):
 def Get_User_Files(SERVER_URL, USER_ID):
     print("Query: " + "{}/getFiles?user_id={}".format(SERVER_URL, USER_ID))
     res = requests.get("{}/getFiles?user_id={}".format(SERVER_URL, USER_ID))
+    ACCOUNT_1 = USER_ID
     return res.json()
 
 # API 2: GET PUBLIC KEY OF USER
@@ -127,12 +129,14 @@ def Approver_Check_Pending_Approval_Requests(SERVER_URL, USER_ID):
     return res.json()
 
 # API 5: GET APPROVED ENCRYPTED SECRET SHARES
-def Requestor_Check_Approval_Requests(SERVER_URL, FILENAME, APPROVER_ID):
+def Get_Approver_Secret_Share(SERVER_URL, FILENAME, APPROVER_ID):
     res = requests.get("{}/getApproverSecret?filename={}&approver_id={}".format(SERVER_URL, FILENAME, APPROVER_ID))
     return res.json()
 
 # API 6: APPROVE REQUEST
 def Approve_Request(SERVER_URL, FILENAME, REQUESTOR_ID, ENCRYPTED_SECRET_SHARE, OWNER_ID):
+    print("{}/approve".format(SERVER_URL))
+    print("filename:" + str(FILENAME) + " requestor:" + str(REQUESTOR_ID) + ", encrypted_share: " + str(ENCRYPTED_SECRET_SHARE) + ", user_id: " + str(OWNER_ID))
     res = requests.post("{}/approve".format(SERVER_URL), json={
         "filename": FILENAME,
         "requestor": REQUESTOR_ID,
@@ -225,6 +229,20 @@ def authorize():
     filename = request.args.get('filename')
     print(filename)
     return render_template('authorize.html', filename=filename)
+
+@app.route('/approve_file', methods=['GET'])
+def approve_file():
+    filename = request.args.get('filename')
+    print("Approving File: " + filename)
+
+    # get the approver secret share
+    secret_share = eval(Get_Approver_Secret_Share(BASE_URL, filename, ACCOUNT_0)['data'])[1]
+
+    print(secret_share)
+
+    Approve_Request(BASE_URL, filename, ACCOUNT_0, secret_share, ACCOUNT_1)
+
+    return render_template("success.html", name = filename)  
 
 @app.route('/authorize-request', methods=['POST'])
 def authorize_request():
