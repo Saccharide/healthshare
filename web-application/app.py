@@ -26,7 +26,7 @@ Private Keys:
 
 '''
 
-from flask import Flask, url_for, render_template, request, redirect, session
+from flask import Flask, url_for, render_template, request, redirect, session, send_file
 from flask_sqlalchemy import SQLAlchemy
 from crypto import *
 from werkzeug.utils import secure_filename
@@ -44,7 +44,7 @@ db = SQLAlchemy(app)
 ACCOUNT_0 = "0x06f47c9896f0e953af35320d61f020e8401002bc"
 ACCOUNT_1 = ""
 BASE_URL = "http://localhost:3000"
-CONNECTION_COMMAND = 'b localhost:49587'
+CONNECTION_COMMAND = 'b localhost:50112'
 
 def Upload_To_P2P(KEY, FILEPATH):
     child = pexpect.spawn('./dhtnode')
@@ -67,11 +67,12 @@ def Download_From_P2P(FILENAME):
     child.sendline(CONNECTION_COMMAND)
     response = child.before
     print response
-    time.sleep(5)
+    time.sleep(2)
     child.expect('>>')
     get_command = 'g ' + FILENAME
     print(get_command)
     child.sendline(get_command)
+    time.sleep(5)
     response = child.before
     print response
 
@@ -200,11 +201,14 @@ def Delete_File(SERVER_URL, FILENAME, REQUESTOR_ID):
         "filename": FILENAME,
         "user_id": REQUESTOR_ID
     })
+    print("{}/removeFile".format(SERVER_URL))
+    print("filename: " + FILENAME + " user_id: " + REQUESTOR_ID)
     return res.json()
 
 # API 14: GET A LIST OF A SECRETE SHARES FOR FILES THAT WERE REQUESTED PREVIOUSLY
 def Get_List_Of_Files_With_Secret_Share(SERVER_URL,USER_ID):
     res = requests.get("{}/getApprovedListSecrets?user_id={}".format(SERVER_URL, USER_ID))
+    print("{}/getApprovedListSecrets?user_id={}".format(SERVER_URL, USER_ID))
     return res.json()
 
 
@@ -230,6 +234,23 @@ def authorize():
     filename = request.args.get('filename')
     print(filename)
     return render_template('authorize.html', filename=filename)
+
+@app.route('/view/delete', methods=['GET', 'POST'])
+def delete():
+    filename = request.args.get('filename')
+    print(filename)
+    Delete_File(BASE_URL, filename, ACCOUNT_0)
+    return render_template('success.html', name=filename)
+
+@app.route('/approved/download', methods=['GET', 'POST'])
+def download():
+    filename = request.args.get('filename')
+    print(filename)
+    Download_From_P2P(filename)
+    downloads_dir = os.path.join(app.instance_path, '../')
+    obs_filname = os.path.join(downloads_dir, 'tempfile')
+    print(obs_filname)
+    return send_file(obs_filname, as_attachment=True)
 
 @app.route('/approve_file', methods=['GET'])
 def approve_file():
@@ -317,6 +338,10 @@ def login():
                     ACCOUNT_0 = "0xc2d2f7152a8ed700d1cd08cb5cfbe4c7a1d9ce03"
                     print("ACCOUNT_0 set to: " + ACCOUNT_0)
 
+                if 'Elgin' in name:
+                    ACCOUNT_0 = "0x06f47c9896f0e953af35320d61f020e8401002bc"
+                    print("ACCOUNT_0 set to: " + ACCOUNT_0)
+
                 return redirect(url_for('home'))
             else:
                 return 'Dont Login'
@@ -330,11 +355,37 @@ def view():
 
     items_list = []
 
-    for file in file_list["data"]:
-        print(file)
-        if file != '':
-            item = {'File Name': file, 'Actions': {'icon': 'fa fa-plus', 'text': 'Authorize', 'link': 'authorize?filename=' + file}}
-            items_list.append(item)
+    if "data" in file_list:
+        for file in file_list["data"]:
+            print(file)
+            if file != '':
+                item = {'File Name': file, 'Authorize': {'icon': 'fa fa-plus', 'text': 'Authorize', 'link': 'authorize?filename=' + file}, 'Delete': {'icon': 'fa fa-plus', 'text': 'Delete', 'link': 'delete?filename=' + file}}
+                items_list.append(item)
+    else:
+        item = {'File Name': '', 'Authorize': {'icon': 'fa fa-plus', 'text': 'Authorize', 'link': ''}, 'Delete': {'icon': 'fa fa-plus', 'text': 'Delete', 'link': ''}}
+        items_list.append(item)
+            
+    return render_template('view.html', data=session['username'], columns=['File Name', 'Authorize', 'Delete'], items=items_list)
+
+@app.route('/approved/', methods=['GET'])
+def approved():
+    """Approved Table"""
+
+    file_list = Get_List_Of_Files_With_Secret_Share(BASE_URL,ACCOUNT_0)
+
+    items_list = []
+
+    print(file_list)
+
+    if "data" in file_list:
+        for file in file_list["data"]:
+            print(file)
+            if file != '':
+                item = {'File Name': file['filename'], 'Actions': {'icon': 'fa fa-plus', 'text': 'Download', 'link': 'download?filename=' + file['filename']}}
+                items_list.append(item)
+    else:
+        item = {'File Name': '', 'Actions': {'icon': 'fa fa-plus', 'text': 'Download', 'link': ''}}
+        items_list.append(item)
             
     return render_template('view.html', data=session['username'], columns=['File Name', 'Actions'], items=items_list)
 
@@ -370,9 +421,9 @@ def request_user():
 @app.route('/requestuser/request_file/', methods=['GET'])
 def request_file():
     filename = request.args.get('filename')
-    print("File requested: " + filename, ", Requestor: " + ACCOUNT_0)
-
     global ACCOUNT_0
+
+    print("File requested: " + filename, ", Requestor: " + ACCOUNT_0)
 
     print(Request_Authorization(BASE_URL, filename, ACCOUNT_0)['data'])
 
