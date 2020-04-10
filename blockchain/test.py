@@ -101,6 +101,21 @@ assert res.json()["data"]
 
 # API 4: GET approval request list
 res = requests.get("{}/getApprovableList?user_id={}".format(BASE_URL, ACCOUNT_1))
+# SAMPLE RESPONSE: {
+#   'data': [{
+#     'filename': 'file1',
+#     'requestor_id': '0x00428785e8787c9b156e8c914cfa4be54d1cccd6',
+#     'datetime': '4/9/2020 21:34:21'
+#   }, {
+#     'filename': 'file1',
+#     'requestor_id': '0x00428785e8787c9b156e8c914cfa4be54d1cccd6',
+#     'datetime': '4/9/2020 21:34:35'
+#   }, {
+#     'filename': 'file1',
+#     'requestor_id': '0x00428785e8787c9b156e8c914cfa4be54d1cccd6',
+#     'datetime': '4/9/2020 21:36:2'
+#   }]
+# }
 assert 'file1' in [a["filename"] for a in res.json()["data"]]
 
 # API 6: APPROVE a file access request
