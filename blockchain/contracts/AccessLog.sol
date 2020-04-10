@@ -285,7 +285,7 @@ contract AccessLog {
     function getApprovableList() public view returns (string memory) {
         
         string memory approval_list = "";
-        for(uint i = 0; i < request_board.length; i++ ){
+        for(uint i = 0; i <= request_board.length; i++ ){
             string memory _filename  = request_board[i].filename;
 
             address[] memory approver_list = approval_dict[_filename].approvers;
@@ -301,11 +301,11 @@ contract AccessLog {
 
                 // Check if this file is on approved board
 
-                Approval[] memory approved_list = approval_board_dict[msg.sender];
+                //Approval[] memory approved_list = approval_board;
                 bool approved_before = false;
-                for(uint k = 0; k <= approved_list.length; k++ ){
-                    if (approved_list[k].approver == msg.sender) {
-                        string memory left = approved_list[k].filename;
+                for(uint k = 0; k <= approval_board.length; k++ ){
+                    if (approval_board[k].approver == msg.sender) {
+                        string memory left = approval_board[k].filename;
                         if (keccak256(abi.encodePacked(left)) == keccak256(abi.encodePacked(_filename))) {
                            approved_before = true;
                         }
