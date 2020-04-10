@@ -101,8 +101,6 @@ contract AccessLog {
 
     // API 13: Remove a file from that user
     function removeFile(string memory filename) public view {
-        // Check if this user has anyfile at all
-        assert(hasFile[msg.sender]);
 
         // Checks if this user contain the specified filename
         assert(contains(filename, files[msg.sender]));
