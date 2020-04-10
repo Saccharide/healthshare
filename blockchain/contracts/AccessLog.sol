@@ -298,13 +298,23 @@ contract AccessLog {
                 }
             }
             if (found){
-                approval_list = append(approval_list, _filename);
-                approval_list = append(approval_list, '+');
-                approval_list = append(approval_list, toString(request_board[index].requester));
-                approval_list = append(approval_list, '+');
-                approval_list = append(approval_list,uint2str(request_board[index].timestamp));
-                approval_list = append(approval_list, ";");
-            }
+
+                // Check if this file is on approved board
+
+                Approval[] memory approved_list = approval_board_dict[msg.sender];
+                for(uint k = 0; k < approved_list.length; k++ ){
+                    if (approved_list[k].approver != msg.sender) {
+                        approval_list = append(approval_list, _filename);
+                        approval_list = append(approval_list, '+');
+                        approval_list = append(approval_list, toString(request_board[index].requester));
+                        approval_list = append(approval_list, '+');
+                        approval_list = append(approval_list,uint2str(request_board[index].timestamp));
+                        approval_list = append(approval_list, ";");
+                    }
+                }
+ 
+
+           }
         }
 
         return approval_list;
