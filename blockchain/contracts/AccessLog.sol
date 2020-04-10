@@ -291,7 +291,7 @@ contract AccessLog {
             address[] memory approver_list = approval_dict[_filename].approvers;
             bool found = false;
             uint index = 0;
-            for(uint j = 0; j < approver_list.length; j++ ){
+            for(uint j = 0; j <= approver_list.length; j++ ){
                 if (approver_list[j] == msg.sender) {
                     found  = true;
                     index = i;
@@ -308,7 +308,6 @@ contract AccessLog {
                         string memory left = approved_list[k].filename;
                         if (keccak256(abi.encodePacked(left)) == keccak256(abi.encodePacked(_filename))) {
                            approved_before = true;
-                           break;
                         }
                     }
                 }
