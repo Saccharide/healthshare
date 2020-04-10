@@ -116,8 +116,8 @@ app.get('/getApproverSecret', asyncHandler(async function (req, res) {
 
 app.get('/getApprovableList', asyncHandler(async function (req, res) {
   var results = await instance.getApprovableList.call(
-    {from: req.query.user_id}
-  );
+      {from: req.query.user_id}
+    );
 
   results = str2array(results, ";")
   results = results.map((data) => {
@@ -156,8 +156,8 @@ app.post('/approve', asyncHandler(async function (req, res) {
 
 app.get('/getApprovedListSecrets', asyncHandler(async function (req, res) {
   var results = await instance.getApprovedListSecrets.call(
-    {from: req.query.user_id}
-  );
+      {from: req.query.user_id}
+    );
   results = str2array(results, ";")
   results = results.map((data) => {
     let procesed_data = str2array(data, ":")
@@ -192,9 +192,7 @@ app.post('/createAccount', asyncHandler(async function (req, res) {
 }))
 
 app.use(function(err, req, res, next) {
-  console.log(err);
   return res.status(500).json({
-    "error": err
   });
 });
 
