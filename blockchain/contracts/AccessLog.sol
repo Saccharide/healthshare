@@ -281,56 +281,83 @@ contract AccessLog {
     }
     return string(bstr);
 }
+
     // API 4: check the request board and see which one I can approve
     function getApprovableList() public view returns (string memory) {
         
         string memory approval_list = "";
-        for(uint i = 0; i <= request_board.length; i++ ){
+        for(uint i = 0; i < request_board.length; i++ ){
             string memory _filename  = request_board[i].filename;
-
             address[] memory approver_list = approval_dict[_filename].approvers;
             bool found = false;
             uint index = 0;
-            for(uint j = 0; j <= approver_list.length; j++ ){
+            for(uint j = 0; j < approver_list.length; j++ ){
                 if (approver_list[j] == msg.sender) {
                     found  = true;
                     index = i;
                 }
             }
             if (found){
-
-//                // Check if this file is on approved board
+                approval_list = append(approval_list, _filename);
+                approval_list = append(approval_list, '+');
+                approval_list = append(approval_list, toString(request_board[index].requester));
+                approval_list = append(approval_list, '+');
+                approval_list = append(approval_list,uint2str(request_board[index].timestamp));
+                approval_list = append(approval_list, ";");
+            }
+        }
+        return approval_list;
+    }
+//    // API 4: check the request board and see which one I can approve
+//    function getApprovableList() public view returns (string memory) {
+//        
+//        string memory approval_list = "";
+//        for(uint i = 0; i <= request_board.length; i++ ){
+//            string memory _filename  = request_board[i].filename;
 //
-//                //Approval[] memory approved_list = approval_board;
-//                bool approved_before = false;
-//                for(uint k = 0; k <= approval_board.length; k++ ){
-//                    if (approval_board[k].approver == msg.sender) {
-//                        string memory left = approval_board[k].filename;
-//                        if (keccak256(abi.encodePacked(left)) == keccak256(abi.encodePacked(_filename))) {
-//                           approved_before = true;
-//                        }
-//                    }
+//            address[] memory approver_list = approval_dict[_filename].approvers;
+//            bool found = false;
+//            uint index = 0;
+//            for(uint j = 0; j <= approver_list.length; j++ ){
+//                if (approver_list[j] == msg.sender) {
+//                    found  = true;
+//                    index = i;
 //                }
-//                if (!approved_before) {
+//            }
+//            if (found){
+//
+////                // Check if this file is on approved board
+////
+////                //Approval[] memory approved_list = approval_board;
+////                bool approved_before = false;
+////                for(uint k = 0; k <= approval_board.length; k++ ){
+////                    if (approval_board[k].approver == msg.sender) {
+////                        string memory left = approval_board[k].filename;
+////                        if (keccak256(abi.encodePacked(left)) == keccak256(abi.encodePacked(_filename))) {
+////                           approved_before = true;
+////                        }
+////                    }
+////                }
+////                if (!approved_before) {
+////                    approval_list = append(approval_list, _filename);
+////                    approval_list = append(approval_list, '+');
+////                    approval_list = append(approval_list, toString(request_board[index].requester));
+////                    approval_list = append(approval_list, '+');
+////                    approval_list = append(approval_list,uint2str(request_board[index].timestamp));
+////                    approval_list = append(approval_list, ";");
+////                 }
 //                    approval_list = append(approval_list, _filename);
 //                    approval_list = append(approval_list, '+');
 //                    approval_list = append(approval_list, toString(request_board[index].requester));
 //                    approval_list = append(approval_list, '+');
 //                    approval_list = append(approval_list,uint2str(request_board[index].timestamp));
 //                    approval_list = append(approval_list, ";");
-//                 }
-                    approval_list = append(approval_list, _filename);
-                    approval_list = append(approval_list, '+');
-                    approval_list = append(approval_list, toString(request_board[index].requester));
-                    approval_list = append(approval_list, '+');
-                    approval_list = append(approval_list,uint2str(request_board[index].timestamp));
-                    approval_list = append(approval_list, ";");
-
-           }
-        }
-
-        return approval_list;
-    }
+//
+//           }
+//        }
+//
+//        return approval_list;
+//    }
 
     struct Approval {
         string filename;
