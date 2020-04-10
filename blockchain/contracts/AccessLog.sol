@@ -312,13 +312,13 @@ contract AccessLog {
     function getApprovableList() public view returns (string memory) {
         
         string memory approval_list = "";
-        for(uint i = 0; i <= request_board.length; i++ ){
+        for(uint i = 0; i < request_board.length; i++ ){
             string memory _filename  = request_board[i].filename;
 
             address[] memory approver_list = approval_dict[_filename].approvers;
             bool found = false;
             uint index = 0;
-            for(uint j = 0; j <= approver_list.length; j++ ){
+            for(uint j = 0; j < approver_list.length; j++ ){
                 if (approver_list[j] == msg.sender) {
                     found  = true;
                     index = i;
@@ -330,7 +330,7 @@ contract AccessLog {
 
                 //Approval[] memory approved_list = approval_board;
                 bool approved_before = false;
-                for(uint k = 0; k <= approval_board.length; k++ ){
+                for(uint k = 0; k < approval_board.length; k++ ){
                     if (approval_board[k].approver == msg.sender) {
                         string memory left = approval_board[k].filename;
                         if (keccak256(abi.encodePacked(left)) == keccak256(abi.encodePacked(_filename))) {
