@@ -247,7 +247,31 @@ contract AccessLog {
         return "Successfully added request to request board";
 
     }
+    function toString(address x) public pure returns (string memory) {
+        bytes memory b = new bytes(20);
+        for (uint i = 0; i < 20; i++)
+            b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
+        return string(b);
+    }
 
+    function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
+    if (_i == 0) {
+        return "0";
+    }
+    uint j = _i;
+    uint len;
+    while (j != 0) {
+        len++;
+        j /= 10;
+    }
+    bytes memory bstr = new bytes(len);
+    uint k = len - 1;
+    while (_i != 0) {
+        bstr[k--] = byte(uint8(48 + _i % 10));
+        _i /= 10;
+    }
+    return string(bstr);
+}
     // API 4: check the request board and see which one I can approve
     function getApprovableList() public view returns (string memory) {
         
@@ -257,13 +281,19 @@ contract AccessLog {
 
             address[] memory approver_list = approval_dict[_filename].approvers;
             bool found = false;
+            uint index = 0;
             for(uint j = 0; j < approver_list.length; j++ ){
                 if (approver_list[j] == msg.sender) {
                     found  = true;
+                    index = i;
                 }
             }
             if (found){
                 approval_list = append(approval_list, _filename);
+                approval_list = append(approval_list, '+');
+                approval_list = append(approval_list, toString(request_board[index].requester));
+                approval_list = append(approval_list, '+');
+                approval_list = append(approval_list,uint2str(request_board[index].timestamp));
                 approval_list = append(approval_list, ";");
             }
         }
