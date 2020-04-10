@@ -100,12 +100,12 @@ contract AccessLog {
     }
 
     // API 13: Remove a file from that user
-    function removeFile(string memory filename) public view {
+    function removeFile(string memory filename) public {
         // Checks if this user contain the specified filename
         assert(contains(filename, files[msg.sender]));
         // Find the index of the substring, remove the substring
         filename = append(filename,";");
-        remove(filename, files[msg.sender]);
+        files[msg.sender] = remove(filename, files[msg.sender]);
 
     }
 
@@ -129,7 +129,7 @@ contract AccessLog {
         bool found = false;
 
         // Loop through the original string
-        for (uint i = 0; i < baseBytes.length - targetBytes.length; i++) {
+        for (uint i = 0; i <= baseBytes.length - targetBytes.length; i++) {
             bool flag = true;
             // Check each character to see if they match
             for (uint j = 0; j < targetBytes.length; j++){ 
@@ -153,7 +153,7 @@ contract AccessLog {
 
         uint index = 0;
         // Loop through the original string
-        for (uint i = 0; i < baseBytes.length - targetBytes.length; i++) {
+        for (uint i = 0; i <= baseBytes.length - targetBytes.length; i++) {
             bool flag = true;
             // Check each character to see if they match
             for (uint j = 0; j < targetBytes.length; j++){ 
@@ -167,7 +167,7 @@ contract AccessLog {
                 break;
             }
         }
-        return string(abi.encodePacked(substring(base,0,index), substring(base,baseBytes.length - targetBytes.length, baseBytes.length )));
+        return string(abi.encodePacked(substring(base,0,index), substring(base, index + targetBytes.length, baseBytes.length )));
  
     }
     // Helper function for removing a file from list string
