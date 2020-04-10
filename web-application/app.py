@@ -22,9 +22,6 @@ Private Keys:
 (7) 2e5b11cf0841759913009fdf462bfc4ca8ed63412387d5f4cb66bf63e014ca61
 (8) 552301299342183b7b57bb35ad2a0f11188be89ab762fb0ffc10b903048a8768
 (9) f6eb1050cb3fec1795a1e6d450b53f929f8bd068cdfaeed7e052ebfb22c4a6e1
-
-
-
 '''
 
 from flask import Flask, url_for, render_template, request, redirect, session
@@ -45,7 +42,7 @@ db = SQLAlchemy(app)
 ACCOUNT_0 = "0x06f47c9896f0e953af35320d61f020e8401002bc"
 ACCOUNT_1 = ""
 BASE_URL = "http://localhost:3000"
-CONNECTION_COMMAND = 'b localhost:52230'
+CONNECTION_COMMAND = 'b localhost:34240'
 
 def Upload_To_P2P(KEY, FILEPATH):
     child = pexpect.spawn('./dhtnode')
