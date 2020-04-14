@@ -186,7 +186,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 ---
   **API 1 : Associating User Information**
   
-  Status: done
   
   Creates and links a patient file with user's id (an address)
 
@@ -195,7 +194,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 2 : Fetching a User's Public Key**
   
-  Status: done
   
   Gets the public key associated with a user 
 
@@ -204,7 +202,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 3: Approval Mappings**
   
-  Status: done
 
   Determines who can approve a patient file 
   
@@ -213,7 +210,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	
   **API 4 : Checking Pending Approval Requests**
   
-  Status: done
 
   Checks the status of pending approval requests -- goes to Smart Contract 5, queries Smart Contract 3, and checks against Smart Contract 4 to see if a request has *already* been approved
   
@@ -222,7 +218,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 5 : Getting encrypted_secret_shares_with_approver_public_key**
   
-  Status: done
 
   Gets the encrypted secret shares shared with a requestor. 
   
@@ -231,7 +226,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	
   **API 6 : Approving Requests**
   
-  Status: done
 
   Approves a request for access of a patient  file. 
   
@@ -240,8 +234,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	
   **API 7 : User Public Key Creation**
   
-  Status: done
-  
+
   Creates a public key to associate with a given user id. 
   
 	input: user_id, public_key
@@ -250,7 +243,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 8 : Getting User Associated File Names**
   
-  Status: done
   
   Gets a list of filenames associated with the user. 
   
@@ -260,7 +252,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 9 : Getting Ethereum Addresses**
   
-  Status: done
 
   Gets the Ethereum Block Chain address for a patient 
 
@@ -270,7 +261,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 10: Creating a Patient's Ethereum Address**
   
-  Status: done
 
   Links and creates an Ethereum Block Chain address to a patient's username and birthday.
 
@@ -278,8 +268,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 	output:  Ethereum Address
 	
   **API 11 : Request Authorization** 
-  
-  Status: done
+
 
   Creates an authorization for a patient file 
   
@@ -288,7 +277,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 12 : Adding Files to a User (OVERLAPPING WITH 1)** 
 
-  Status: done
   
   Add a file to the associated user i.e. patient in Ethereum/HealthShare. 
   
@@ -297,8 +285,7 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 13 : Deleting a File from a User** 
 
-  Status: done
-  
+
   Deletes a file associated with a user/patient in Ethereum/HealthShare. 
   
 	input:  Ethereum address
@@ -306,7 +293,6 @@ HealthShare uses a series of Smart Contracts and API's to communicate between ou
 
   **API 14 : Getting a List of Files with Secret Shares** 
 
-  Status: done
   
   Gets a list of files for a user which were approved by another. 
   
